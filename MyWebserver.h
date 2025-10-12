@@ -214,7 +214,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
     <header>
       <div class="navbar fixed-top">
           <div class="container">
-            <div class="navtitle">FreeRTOS IOT Interface Monitoring System</div>
+            <div class="navtitle">FC1000 Antenna Tuner</div>
             <div class="navdata" id = "date">mm/dd/yyyy</div>
             <div class="navheading">DATE</div><br>
             <div class="navdata" id = "time">00:00:00</div>
@@ -224,7 +224,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
     </header>
   
     <main class="container" style="margin-top:70px">
-      <div class="category">Sensor Readings</div>
+      <div class="category">System Status</div>
       <div style="border-radius: 10px !important;">
       <table style="width:50%">
       <colgroup>
@@ -241,18 +241,30 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
         <th colspan="1"><div class="heading">Volts</div></th>
       </tr>
       <tr>
-        <td><div class="bodytext">Analog pin 34</div></td>
+        <td><div class="bodytext">Forward Power</div></td>
         <td><div class="tabledata" id = "b0"></div></td>
         <td><div class="tabledata" id = "v0"></div></td>
       </tr>
       <tr>
-        <td><div class="bodytext">Analog pin 35</div></td>
+        <td><div class="bodytext">Refrect Power</div></td>
         <td><div class="tabledata" id = "b1"></div></td>
         <td><div class="tabledata" id = "v1"></div></td>
       </tr>
-        <tr>
+      <tr>
         <td><div class="bodytext">Digital switch</div></td>
         <td><div class="tabledata" id = "switch"></div></td>
+      </tr>
+      <tr>
+        <td><div class="bodytext">RL101</div></td>
+        <td><div class="tabledata" id = "rl101"></div></td>
+      </tr>
+      <tr>
+        <td><div class="bodytext">RL103</div></td>
+        <td><div class="tabledata" id = "rl103"></div></td>
+      </tr>
+      <tr>
+        <td><div class="bodytext">RL104</div></td>
+        <td><div class="tabledata" id = "rl104"></div></td>
       </tr>
       <tr>
         <td><div class="bodytext">Emergency Mode</div></td>
@@ -327,7 +339,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       </div>
     </div>
     <br>
-    <div class="category">Sensor Controls</div>
+    <div class="category">Relay Controls</div>
     <br>
     <div class="bodytext">Inbuilt LED </div>
     <button type="button" class = "btn" id = "btn0" onclick="ButtonPress0()">Toggle</button>
@@ -337,15 +349,27 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
     <button type="button" class = "btn" id = "btn1" onclick="ButtonPress1()">Toggle</button>
     </div>
     <br>
+    <div class="bodytext">RL101</div>
+    <button type="button" class = "btn" id = "btn101" onclick="ButtonPress101()">Toggle</button>
+    </div>
     <br>
-    <div class="bodytext">Fan Speed Control (RPM: <span id="fanrpm"></span>)</div>
+    <div class="bodytext">RL103</div>
+    <button type="button" class = "btn" id = "btn103" onclick="ButtonPress103()">Toggle</button>
+    </div>
     <br>
-    <input type="range" class="fanrpmslider" min="0" max="255" value = "0" width = "0%" oninput="UpdateSlider(this.value)"/>
+    <div class="bodytext">RL104</div>
+    <button type="button" class = "btn" id = "btn104" onclick="ButtonPress104()">Toggle</button>
+    </div>
+    <br>
+    <br>
+    <div class="bodytext">Relay Speed Control (ms: <span id="fanrpm"></span>)</div>
+    <br>
+    <input type="range" class="fanrpmslider" min="100" max="5000" value = "0" width = "0%" oninput="UpdateSlider(this.value)"/>
     <br>
     <br>
   </main>
 
-  <footer div class="foot" id = "temp" >Embedded System Design Semester Project</div></footer>
+  <footer div class="foot" id = "temp" >JJ1VQD/JE2VGT</div></footer>
   
   </body>
 
@@ -391,7 +415,6 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       xhttp.send();
     }
 
-
     // function to handle button press from HTML code above
     // and send a processing string back to server
     // this processing string is use in the .on method
@@ -407,7 +430,25 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       xhttp.open("PUT", "BUTTON_1", false);
       xhttp.send(); 
     }
-    
+
+    function ButtonPress101() {
+      var xhttp = new XMLHttpRequest(); 
+      xhttp.open("PUT", "BUTTON_101", false);
+      xhttp.send(); 
+    }    
+
+    function ButtonPress103() {
+      var xhttp = new XMLHttpRequest(); 
+      xhttp.open("PUT", "BUTTON_103", false);
+      xhttp.send(); 
+    }
+
+    function ButtonPress104() {
+      var xhttp = new XMLHttpRequest(); 
+      xhttp.open("PUT", "BUTTON_104", false);
+      xhttp.send(); 
+    }    
+
     function UpdateSlider(value) {
       var xhttp = new XMLHttpRequest();
       // this time i want immediate feedback to the fan speed
@@ -518,6 +559,52 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
         document.getElementById("switch").innerHTML="Switch is ON";
         document.getElementById("btn1").innerHTML="Turn OFF";
         document.getElementById("switch").style.color="#00AA00";
+      }
+
+      xmldoc = xmlResponse.getElementsByTagName("RL101");
+      message = xmldoc[0].firstChild.nodeValue;
+      document.getElementById("rl101").style.backgroundColor="rgb(200,200,200)";
+      // update the text in the table
+
+      if (message == 0){
+        document.getElementById("rl101").innerHTML="Switch is OFF";
+        document.getElementById("btn101").innerHTML="Turn ON";
+        document.getElementById("rl101").style.color="#0000AA"; 
+      }
+      else {
+        document.getElementById("rl101").innerHTML="Switch is ON";
+        document.getElementById("btn101").innerHTML="Turn OFF";
+        document.getElementById("rl101").style.color="#00AA00";
+      }
+
+      xmldoc = xmlResponse.getElementsByTagName("RL103");
+      message = xmldoc[0].firstChild.nodeValue;
+      document.getElementById("btn103").style.backgroundColor="rgb(200,200,200)";
+      // update the text in the table
+      if (message == 0){
+        document.getElementById("rl103").innerHTML="Switch is OFF";
+        document.getElementById("btn103").innerHTML="Turn ON";
+        document.getElementById("rl103").style.color="#0000AA"; 
+      }
+      else {
+        document.getElementById("rl103").innerHTML="Switch is ON";
+        document.getElementById("btn103").innerHTML="Turn OFF";
+        document.getElementById("rl103").style.color="#00AA00";
+      }
+
+      xmldoc = xmlResponse.getElementsByTagName("RL104");
+      message = xmldoc[0].firstChild.nodeValue;
+      document.getElementById("btn104").style.backgroundColor="rgb(200,200,200)";
+      // update the text in the table
+      if (message == 0){
+        document.getElementById("rl104").innerHTML="Switch is OFF";
+        document.getElementById("btn104").innerHTML="Turn ON";
+        document.getElementById("rl104").style.color="#0000AA"; 
+      }
+      else {
+        document.getElementById("rl104").innerHTML="Switch is ON";
+        document.getElementById("btn104").innerHTML="Turn OFF";
+        document.getElementById("rl104").style.color="#00AA00";
       }
 
       // Add this part to update the content of the Emergency Mode cell

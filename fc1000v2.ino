@@ -5,18 +5,19 @@
 #include "MyWiFiSettings.h"
 #include "MyWebserver.h"
 #include "Adafruit_HDC1000.h"
+#include <MCP23017.h>
 
 //#define PIN_OUTPUT 5
 //#define PIN_FAN 5
 //#define PIN_LED 4
-#define PIN_A0 0
-#define PIN_A1 1
+#define PIN_A0 0  // Forward Power
+#define PIN_A1 1  // Refrect Power
 //#define IR_SENSOR_PIN 3  
 //#define ULTRASONIC_TRIGGER_PIN 2  
 //#define ULTRASONIC_ECHO_PIN 3     
 //#define BUZZER_PIN 4              
-#define DHT_PIN 3   
-#define DHT_TYPE DHT11
+//#define DHT_PIN 3   
+//#define DHT_TYPE DHT11
 
 /* Actual data stored in WiFiSettings.h */
 //const char *ssid = "YOUR_SSID";
@@ -25,6 +26,36 @@
 WebServer server(80);
 
 Adafruit_HDC1000 hdc = Adafruit_HDC1000();
+
+struct bitfield {
+  uint8_t b0 : 1;
+  uint8_t b1 : 1;
+  uint8_t b2 : 1;
+  uint8_t b3 : 1;
+  uint8_t b4 : 1;
+  uint8_t b5 : 1;
+  uint8_t b6 : 1;
+  uint8_t b7 : 1;
+};
+
+union SERCAP {
+  uint8_t   byte;
+  bitfield  bits;
+};
+
+union SERIND {
+  uint8_t   byte;
+  bitfield  bits;
+};
+
+union PARIND {
+  uint8_t   byte;
+  bitfield  bits;
+};
+
+SERCAP sercap;
+SERIND serind;
+PARIND parind;
 
 TaskHandle_t mainTask;
 TaskHandle_t serverTask;
@@ -35,8 +66,11 @@ TaskHandle_t Task3Handle = NULL;
 void ADC_Function(void *pvParameters);
 
 void UpdateSlider();
-void ProcessButton_1();
 void ProcessButton_0();
+void ProcessButton_1();
+void ProcessButton_101();
+void ProcessButton_103();
+void ProcessButton_104();
 void SendXML();
 void SendWebsite();
 
@@ -47,8 +81,8 @@ uint32_t SensorUpdate = 0;
 int FanSpeed = 0;
 bool LED0 = false, SomeOutput = false;
 bool emergencyShutdownActive = false;
-float temperatureDHT = 0.0;
-float humidityDHT = 0.0;
+float temperature = 0.0;
+float humidity = 0.0;
 int taskCount = 0;
 
 char XML[2048];
@@ -112,17 +146,20 @@ void setup(void) {
   server.on("/UPDATE_SLIDER", UpdateSlider);
   server.on("/BUTTON_0", ProcessButton_0);
   server.on("/BUTTON_1", ProcessButton_1);
+  server.on("/BUTTON_101", ProcessButton_101); 
+  server.on("/BUTTON_103", ProcessButton_103);  
+  server.on("/BUTTON_104", ProcessButton_104);  
 
   server.begin();
   Serial.println("HTTP server started");
 
-  xTaskCreateUniversal(ADC_Function,        "mainTask",   8192, NULL, 1, &mainTask, 0);
+  xTaskCreateUniversal(ADC_Function,        "mainTask",   4096, NULL, 1, &mainTask, 0);
   // Create FreeRTOS tasks
-  xTaskCreateUniversal(IR_Sensor_Function,  "Task1",      8192, NULL, 2, &Task1Handle, 0);
-  xTaskCreateUniversal(DHT_Sensor_Function, "Task2",      8192, NULL, 2, &Task2Handle, 0);
+  xTaskCreateUniversal(IR_Sensor_Function,  "Task1",      4096, NULL, 2, &Task1Handle, 0);
+  xTaskCreateUniversal(HDC_Sensor_Function, "Task2",      4096, NULL, 2, &Task2Handle, 0);
   xTaskCreateUniversal(Emergency_Function,  "Task3",      8192, NULL, 3, &Task3Handle, 0);
   // Create a server task pinned to core 1
-  xTaskCreateUniversal(ServerTask,          "serverTask", 4096, NULL, 3, &serverTask, 1);
+  xTaskCreateUniversal(ServerTask,          "serverTask", 8192, NULL, 3, &serverTask, 1);
 }
 
 void loop(void) {
@@ -141,9 +178,8 @@ void ADC_Function(void *pvParameters) {
       VoltsA0 = BitsA0 * 3.3 / 4096;
       VoltsA1 = BitsA1 * 3.3 / 4096;
     }
-    vTaskDelay(pdMS_TO_TICKS(10));  // Adjust the delay as needed
+    vTaskDelay(pdMS_TO_TICKS(1000));  // Adjust the delay as needed
   }
-  
 }
 
 void UpdateSlider() {
@@ -172,9 +208,31 @@ void ProcessButton_0() {
 
 void ProcessButton_1() {
   SomeOutput = !SomeOutput;
+  sercap.bits.b7 = !sercap.bits.b7;
 //  digitalWrite(PIN_OUTPUT, SomeOutput);
   Serial.print("Button 1 ");
   Serial.println(LED0);
+  server.send(200, "text/plain", "");
+}
+
+void ProcessButton_101() {
+  parind.bits.b7 = !parind.bits.b7;
+  Serial.print("Button 101 ");
+  Serial.println(sercap.byte);
+  server.send(200, "text/plain", "");
+}
+
+void ProcessButton_103() {
+  serind.bits.b6 = !serind.bits.b6;
+  Serial.print("Button 103 ");
+  Serial.println(serind.byte);
+  server.send(200, "text/plain", "");
+}
+
+void ProcessButton_104() {
+  serind.bits.b7 = !serind.bits.b7;
+  Serial.print("Button 104 ");
+  Serial.println(sercap.byte);
   server.send(200, "text/plain", "");
 }
 
@@ -206,6 +264,29 @@ void SendXML() {
     strcat(XML, "<SWITCH>0</SWITCH>\n");
   }
 
+  if (parind.bits.b7) {
+  strcat(XML, "<RL101>1</RL101>\n");
+  } else{
+  strcat(XML, "<RL101>0</RL101>\n");
+  }
+
+  if (serind.bits.b6) {
+  strcat(XML, "<RL103>1</RL103>\n");
+  } else{
+  strcat(XML, "<RL103>0</RL103>\n");
+  }
+
+  if (serind.bits.b7) {
+  strcat(XML, "<RL104>1</RL104>\n");
+  } else{
+  strcat(XML, "<RL104>0</RL104>\n");
+  }
+
+#if 0
+  strcat(XML, "<RL103>1</RL103>\n");
+
+  strcat(XML, "<RL104>1</RL104>\n");
+#endif
   strcat(XML, "<EMERGENCY_MODE>");
   if (emergencyShutdownActive) {
     strcat(XML, "1");
@@ -237,13 +318,13 @@ void SendXML() {
 
   // Append temperature value
   strcat(XML, "<TEMP>");
-  sprintf(buf, "%.2f", temperatureDHT);
+  sprintf(buf, "%.2f", temperature);
   strcat(XML, buf);
   strcat(XML, "</TEMP>\n");
 
   // Append humidity value
   strcat(XML, "<HUMIDITY>");
-  sprintf(buf, "%.2f", humidityDHT);
+  sprintf(buf, "%.2f", humidity);
   strcat(XML, buf);
   strcat(XML, "</HUMIDITY>\n");
 
@@ -266,7 +347,6 @@ void ServerTask(void *pvParameters) {
   }
 }
 
-
 void IR_Sensor_Function(void *pvParameters) {
   taskCount++;
 //  pinMode(IR_SENSOR_PIN, INPUT);
@@ -281,21 +361,20 @@ void IR_Sensor_Function(void *pvParameters) {
     } else {
       Serial.println("No obstacle detected.");
     }
-    vTaskDelay(pdMS_TO_TICKS(50));  // Adjust the delay as needed
+    vTaskDelay(pdMS_TO_TICKS(1000));  // Adjust the delay as needed
   }
-  
 }
 
-void DHT_Sensor_Function(void *pvParameters) {
+void HDC_Sensor_Function(void *pvParameters) {
   taskCount++;
   while (1) {
-    temperatureDHT = hdc.readTemperature();
-    humidityDHT = hdc.readHumidity();
+    temperature = hdc.readTemperature();
+    humidity = hdc.readHumidity();
 
     Serial.print("Task2 - Temperature: ");
-    Serial.print(temperatureDHT);
+    Serial.print(temperature);
     Serial.print(" °C, Humidity: ");
-    Serial.print(humidityDHT);
+    Serial.print(humidity);
     Serial.println(" %");
     // Update the server with temperature and humidity values
     SendXML(); 
@@ -342,8 +421,7 @@ void Emergency_Function(void *pvParameters) {
         // Add any post-emergency code here if needed
       }
     }
-    
-    vTaskDelay(pdMS_TO_TICKS(100));  // Adjust the delay as needed
+    vTaskDelay(pdMS_TO_TICKS(1000));  // Adjust the delay as needed
   }
 }
 
