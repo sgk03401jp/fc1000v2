@@ -1,372 +1,360 @@
-// Controls an LED via an attached button.
-#include "Wire.h"
+#include <WiFi.h>
+#include <NetworkClient.h>
+#include <WebServer.h>
+#include <ESPmDNS.h>
+#include "MyWiFiSettings.h"
+#include "MyWebserver.h"
+#include "DHT.h"
+#include <Adafruit_Sensor.h>
 
-#include <MCP23017.h>
+//#define PIN_OUTPUT 5
+//#define PIN_FAN 5
+//#define PIN_LED 4
+#define PIN_A0 0
+#define PIN_A1 1
+//#define IR_SENSOR_PIN 3  
+//#define ULTRASONIC_TRIGGER_PIN 2  
+//#define ULTRASONIC_ECHO_PIN 3     
+//#define BUZZER_PIN 4              
+#define DHT_PIN 3   
+#define DHT_TYPE DHT11
 
-#define ON  1
-#define OFF 0
+/* Actual data stored in WiFiSettings.h */
+//const char *ssid = "YOUR_SSID";
+//const char *password = "YOUR_PASSWD";
 
-#define LED_PIN 0     // MCP23XXX pin LED is attached to
-#define BUTTON_PIN 1  // MCP23XXX pin button is attached to
+WebServer server(80);
 
-// only used for SPI
-#define CS_PIN 6
+DHT dht(DHT_PIN, DHT_TYPE);
 
-//   b0 : RL105
-//   b1 : RL106
-//   b2 : RL107
-//   b3 : RL108
-//   b4 : RL109
-//   b5 : RL110
-//   b6 : RL111
-//   b7 : 
+TaskHandle_t mainTask;
+TaskHandle_t serverTask;
+TaskHandle_t Task1Handle = NULL;
+TaskHandle_t Task2Handle = NULL;
+TaskHandle_t Task3Handle = NULL;
 
-//   b0 : RL118
-//   b1 : RL119
-//   b2 : RL120
-//   b3 : RL121
-//   b4 : RL122
-//   b5 : 
-//   b6 : RL103
-//   b7 : RL104
+void ADC_Function(void *pvParameters);
 
-//   b0 : RL112
-//   b1 : RL113
-//   b2 : RL114
-//   b3 : RL115
-//   b4 : RL116
-//   b5 : RL117
-//   b6 : 
-//   b7 : RL101,RL102
+void UpdateSlider();
+void ProcessButton_1();
+void ProcessButton_0();
+void SendXML();
+void SendWebsite();
 
+//const int led = 13;
+int BitsA0 = 0, BitsA1 = 0;
+float VoltsA0 = 0, VoltsA1 = 0;
+uint32_t SensorUpdate = 0;
+int FanSpeed = 0;
+bool LED0 = false, SomeOutput = false;
+bool emergencyShutdownActive = false;
+float temperatureDHT = 0.0;
+float humidityDHT = 0.0;
+int taskCount = 0;
 
-// ビットフィールド構造体の定義
-struct bitfield {
-  uint8_t b0 : 1;
-  uint8_t b1 : 1;
-  uint8_t b2 : 1;
-  uint8_t b3 : 1;
-  uint8_t b4 : 1;
-  uint8_t b5 : 1;
-  uint8_t b6 : 1;
-  uint8_t b7 : 1;
-};
+char XML[2048];
+char buf[32];
 
-// ビットフィールドとバイトを共有するunion
-union SERCAP {
-  uint8_t   byte;
-  bitfield  bits;
-};
+void handleRoot() {
+//  digitalWrite(led, 1);
+  server.send(200, "text/plain", "hello from esp32!");
+//  digitalWrite(led, 0);
+}
 
-union SERIND {
-  uint8_t   byte;
-  bitfield  bits;
-};
+void handleNotFound() {
+//  digitalWrite(led, 1);
+  String message = "File Not Found\n\n";
+  message += "URI: ";
+  message += server.uri();
+  message += "\nMethod: ";
+  message += (server.method() == HTTP_GET) ? "GET" : "POST";
+  message += "\nArguments: ";
+  message += server.args();
+  message += "\n";
+  for (uint8_t i = 0; i < server.args(); i++) {
+    message += " " + server.argName(i) + ": " + server.arg(i) + "\n";
+  }
+  server.send(404, "text/plain", message);
+//  digitalWrite(led, 0);
+}
 
-union PARIND {
-  uint8_t   byte;
-  bitfield  bits;
-};
-
-MCP23017 mcp1 = MCP23017(0x20);
-MCP23017 mcp2 = MCP23017(0x21);
-
-SERCAP sercap;
-SERIND serind;
-PARIND parind;
-
-void scan();
-
-void setup() {
-  // put your setup code here, to run once:
-  String board;
-  int ret;
-  
-  delay(1000);
-
+void setup(void) {
+//  pinMode(led, OUTPUT);
+//  digitalWrite(led, 0);
   Serial.begin(115200);
-  Wire.begin();
-  mcp1.init();
-  mcp2.init();
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(ssid, password);
+  Serial.println("");
 
-  mcp1.portMode(MCP23017Port::A, 0);          //Port 1A as output
-  mcp1.portMode(MCP23017Port::A, 0);          //Port 1B as output
-  mcp2.portMode(MCP23017Port::A, 0);          //Port 2A as output
-  mcp2.portMode(MCP23017Port::B, 0b11111111); //Port 2B as input
-  
-  while (!Serial); // Wait for starting serial monitor
-
-#if CONFIG_IDF_TARGET_ESP32
-  // ESP32
-  board="ESP32";
-#elif CONFIG_IDF_TARGET_ESP32S2
-  // ESP32-S2
-  board="ESP32S2";
-#elif CONFIG_IDF_TARGET_ESP32S3
-  // ESP32-S3
-  board="ESP32S3";
-#elif CONFIG_IDF_TARGET_ESP32C3
-  // ESP32-C3
-  board="ESP32C3";
-#define I2C_SDA 8
-#define I2C_SCL 9
-#elif CONFIG_IDF_TARGET_ESP32H2
-  // ESP32-H2
-  board="ESP32H2";
-#else
-  // Other
-  board="Other";
-#endif
-  Serial.print("ESP32 : ");
-  Serial.println(board);
-
-  Serial.println("\nI2C Scanner");
-
-  ret = Wire.begin(I2C_SDA, I2C_SCL);
- 
-  Serial.print("I2C Init : ");
-  Serial.println(ret);
-
-  i2cScan();
-  dumpRegisters(mcp1);
-  dumpRegisters(mcp2);
-
-  Serial.println("Looping...");
-
-  mcp2.writeRegister(MCP23017Register::GPIO_A, 0x00);  //Reset port A 
-  mcp2.writeRegister(MCP23017Register::GPIO_B, 0x00);  //Reset port B
-
-  // GPIO_B reflects the same logic as the input pins state
-  mcp2.writeRegister(MCP23017Register::IPOL_B, 0x00);
-  // Uncomment this line to invert inputs (press a button to lit a led)
-  //mcp.writeRegister(MCP23017Register::IPOL_B, 0xFF);
-#if 0
-  // 初期化：全ビットを0に
-  sercap.byte = 0x00;
-
-  // ビットに名前を付けて書き込み
-  sercap.bits.b0 = 1;  // LSB
-  sercap.bits.b3 = 1;
-  sercap.bits.b7 = 1;  // MSB
-
-  // 結果表示
-  Serial.print("Byte value: 0b");
-  for (int i = 7; i >= 0; i--) {
-    Serial.print((sercap.byte >> i) & 1);
+  // Wait for connection
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
   }
-  Serial.println();
+  Serial.println("");
+  Serial.print("Connected to ");
+  Serial.println(ssid);
+  Serial.print("IP address: ");
+  Serial.println(WiFi.localIP());
 
-  Serial.print("Hex value: 0x");
-  Serial.println(sercap.byte);
+  if (MDNS.begin("esp32")) {
+    Serial.println("MDNS responder started");
+  }
 
-  // 個別ビットの読み取り
-  Serial.print("bit3 is ");
-  Serial.println(sercap.bits.b3 ? "ON" : "OFF");
-#endif
+//  server.on("/", handleRoot);
+//  server.on("/inline", []() {
+//    server.send(200, "text/plain", "this works as well");
+//  });
+
+  server.onNotFound(handleNotFound);
+
+  server.on("/", SendWebsite);
+  server.on("/xml", SendXML);
+  server.on("/UPDATE_SLIDER", UpdateSlider);
+  server.on("/BUTTON_0", ProcessButton_0);
+  server.on("/BUTTON_1", ProcessButton_1);
+
+  server.begin();
+  Serial.println("HTTP server started");
+
+  xTaskCreateUniversal(ADC_Function, "mainTask", 8192, NULL, 1, &mainTask, 0);
+
+  // Create FreeRTOS tasks
+  xTaskCreateUniversal(IR_Sensor_Function, "Task1", 8192, NULL, 2, &Task1Handle, 0);
+  xTaskCreateUniversal(DHT_Sensor_Function, "Task2", 8192, NULL, 2, &Task2Handle, 0);
+  xTaskCreateUniversal(Emergency_Function, "Task3", 8192, NULL, 3, &Task3Handle, 0);
+
+  // Create a server task pinned to core 1
+  xTaskCreateUniversal(ServerTask, "serverTask", 4096, NULL, 3, &serverTask, 1);
+
 }
 
-void loop() {
-  uint8_t currentB;
-
-  // Copy Port B to Port A
-  currentB = mcp2.readPort(MCP23017Port::B);
-  mcp2.writePort(MCP23017Port::A, currentB);
-
-  mcp1aTest();
-  mcp1bTest();
-  mcp2aTest();
-  mcp2bTest();
-
-  delay(5000); 
+void loop(void) {
+//  server.handleClient();
+  delay(2);  //allow the cpu to switch to other tasks
 }
 
-void i2cScan() {
-  // put your main code here, to run repeatedly:
-  byte error, address;
-  int nDevices;
- 
-  Serial.println("Scanning...");
- 
-  nDevices = 0;
-  for(address = 1; address < 127; address++ ) {
-    // The i2c_scanner uses the return value of
-    // the Write.endTransmisstion to see if
-    // a device did acknowledge to the address.
-    Wire.beginTransmission(address);
-    error = Wire.endTransmission();
-    if (error == 0) {
-      Serial.print("I2C device found at address 0x");
-      if (address<16) {
-        Serial.print("0");
-      }
-      Serial.print(address,HEX);
-      Serial.println("  !");
- 
-      nDevices++;
-      delay(500);
-    } else if (error==4) {
-      Serial.print("Unknown error at address 0x");
-      if (address<16)
-        Serial.print("0");
-      Serial.println(address,HEX);
+
+void ADC_Function(void *pvParameters) {
+  taskCount++;
+  while (true) {
+    if ((millis() - SensorUpdate) >= 50) {
+      SensorUpdate = millis();
+      BitsA0 = analogRead(PIN_A0);
+      BitsA1 = analogRead(PIN_A1);
+      VoltsA0 = BitsA0 * 3.3 / 4096;
+      VoltsA1 = BitsA1 * 3.3 / 4096;
     }
+    vTaskDelay(pdMS_TO_TICKS(10));  // Adjust the delay as needed
   }
-  if (nDevices == 0) {
-    Serial.println("No I2C devices found\n");
+  
+}
+
+void UpdateSlider() {
+  String t_state = server.arg("VALUE");
+  FanSpeed = t_state.toInt();
+  Serial.print("UpdateSlider ");
+  Serial.println(FanSpeed);
+
+  // Map FanSpeed to LED brightness
+  int ledBrightness = map(FanSpeed, 0, 255, 0, 255);
+
+  // Set LED brightness 
+//  analogWrite(PIN_FAN, ledBrightness);
+
+  // Respond with the updated RPM value
+  server.send(200, "text/plain", String(FanSpeed));
+}
+
+void ProcessButton_0() {
+  LED0 = !LED0;
+//  digitalWrite(PIN_LED, LED0);
+  Serial.print("Button 0 ");
+  Serial.println(LED0);
+  server.send(200, "text/plain", "");
+}
+
+void ProcessButton_1() {
+  SomeOutput = !SomeOutput;
+//  digitalWrite(PIN_OUTPUT, SomeOutput);
+  Serial.print("Button 1 ");
+  Serial.println(LED0);
+  server.send(200, "text/plain", "");
+}
+
+void SendWebsite() {
+  Serial.println("sending web page");
+  server.send(200, "text/html", PAGE_MAIN);
+}
+
+void SendXML() {
+  strcpy(XML, "<?xml version = '1.0'?>\n<Data>\n");
+  sprintf(buf, "<B0>%d</B0>\n", BitsA0);
+  strcat(XML, buf);
+  sprintf(buf, "<V0>%d.%d</V0>\n", (int)(VoltsA0), abs((int)(VoltsA0 * 10) - ((int)(VoltsA0) * 10)));
+  strcat(XML, buf);
+  sprintf(buf, "<B1>%d</B1>\n", BitsA1);
+  strcat(XML, buf);
+  sprintf(buf, "<V1>%d.%d</V1>\n", (int)(VoltsA1), abs((int)(VoltsA1 * 10) - ((int)(VoltsA1) * 10)));
+  strcat(XML, buf);
+
+  if (LED0) {
+    strcat(XML, "<LED>1</LED>\n");
   } else {
-    Serial.println("done\n");
+    strcat(XML, "<LED>0</LED>\n");
   }
-  //delay(5000); // Wait 5 seconds for next scan
+
+  if (SomeOutput) {
+    strcat(XML, "<SWITCH>1</SWITCH>\n");
+  } else {
+    strcat(XML, "<SWITCH>0</SWITCH>\n");
+  }
+
+  strcat(XML, "<EMERGENCY_MODE>");
+  if (emergencyShutdownActive) {
+    strcat(XML, "1");
+  } else {
+    strcat(XML, "0");
+  }
+  strcat(XML, "</EMERGENCY_MODE>\n");
+  strcat(XML, "<CORE0_STATUS>");
+  if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && uxTaskGetNumberOfTasks() > 0) {
+    strcat(XML, "1");
+  } else {
+    strcat(XML, "0");
+  }
+  strcat(XML, "</CORE0_STATUS>\n");
+
+  strcat(XML, "<CORE1_STATUS>");
+  if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && uxTaskGetNumberOfTasks() > 1) {
+    // char a= Serial.read();
+    // if(a == 'C'){
+    //   strcat(XML, "0");
+    // }
+    strcat(XML, "1");
+  } else {
+    strcat(XML, "0");
+  }
+  strcat(XML, "</CORE1_STATUS>\n");
+  // Append temperature and humidity data to XML
+  strcat(XML, "<DHT_READINGS>\n");
+
+  // Append temperature value
+  strcat(XML, "<TEMP>");
+  sprintf(buf, "%.2f", temperatureDHT);
+  strcat(XML, buf);
+  strcat(XML, "</TEMP>\n");
+
+  // Append humidity value
+  strcat(XML, "<HUMIDITY>");
+  sprintf(buf, "%.2f", humidityDHT);
+  strcat(XML, buf);
+  strcat(XML, "</HUMIDITY>\n");
+
+  strcat(XML, "</DHT_READINGS>\n");
+  strcat(XML, "<TASK_COUNT>");
+  strcat(XML, String(taskCount).c_str());
+  strcat(XML, "</TASK_COUNT>\n");
+
+  strcat(XML, "</Data>\n");
+  Serial.println(XML);
+  server.send(200, "text/xml", XML);
 }
 
-void dumpRegisters(MCP23017 mcp) {
-	uint8_t conf = mcp.readRegister(MCP23017Register::IODIR_A);
-	Serial.print("IODIR_A : ");
-	Serial.print(conf, BIN);
-	Serial.println();
-	
-	conf = mcp.readRegister(MCP23017Register::IODIR_B);
-	Serial.print("IODIR_B : ");
-	Serial.print(conf, BIN);
-	Serial.println();
-
-	conf = mcp.readRegister(MCP23017Register::IPOL_A);
-	Serial.print("IPOL_A : ");
-	Serial.print(conf, BIN);
-	Serial.println();
-
-	conf = mcp.readRegister(MCP23017Register::IPOL_B);
-	Serial.print("IPOL_B : ");
-	Serial.print(conf, BIN);
-	Serial.println();
-
-	conf = mcp.readRegister(MCP23017Register::GPINTEN_A);
-	Serial.print("GPINTEN_A : ");
-	Serial.print(conf, BIN);
-	Serial.println();
-
-	conf = mcp.readRegister(MCP23017Register::GPINTEN_B);
-	Serial.print("GPINTEN_B : ");
-	Serial.print(conf, BIN);
-	Serial.println();
-
-	conf = mcp.readRegister(MCP23017Register::DEFVAL_A);
-	Serial.print("DEFVAL_A : ");
-	Serial.print(conf, BIN);
-	Serial.println();
-
-	conf = mcp.readRegister(MCP23017Register::DEFVAL_B);
-	Serial.print("DEFVAL_B : ");
-	Serial.print(conf, BIN);
-	Serial.println();
-
-	conf = mcp.readRegister(MCP23017Register::INTCON_A);
-	Serial.print("INTCON_A : ");
-	Serial.print(conf, BIN);
-	Serial.println();
-
-	conf = mcp.readRegister(MCP23017Register::INTCON_B);
-	Serial.print("INTCON_B : ");
-	Serial.print(conf, BIN);
-	Serial.println();
-
-	conf = mcp.readRegister(MCP23017Register::IOCON);
-	Serial.print("IOCON : ");
-	Serial.print(conf, BIN);
-	Serial.println();
-
-	//conf = mcp.readRegister(IOCONB);
-	//Serial.print("IOCONB : ");
-	//Serial.print(conf, BIN);
-	//Serial.println();
-
-	conf = mcp.readRegister(MCP23017Register::GPPU_A);
-	Serial.print("GPPU_A : ");
-	Serial.print(conf, BIN);
-	Serial.println();
-
-	conf = mcp.readRegister(MCP23017Register::GPPU_B);
-	Serial.print("GPPU_B : ");
-	Serial.print(conf, BIN);
-	Serial.println();
-
-	conf = mcp.readRegister(MCP23017Register::INTF_A);
-	Serial.print("INTF_A : ");
-	Serial.print(conf, BIN);
-	Serial.println();
-
-	conf = mcp.readRegister(MCP23017Register::INTF_B);
-	Serial.print("INTF_B : ");
-	Serial.print(conf, BIN);
-	Serial.println();
-
-	conf = mcp.readRegister(MCP23017Register::INTCAP_A);
-	Serial.print("INTCAP_A : ");
-	Serial.print(conf, BIN);
-	Serial.println();
-
-	conf = mcp.readRegister(MCP23017Register::INTCAP_B);
-	Serial.print("INTCAP_B : ");
-	Serial.print(conf, BIN);
-	Serial.println();
-
-	conf = mcp.readRegister(MCP23017Register::GPIO_A);
-	Serial.print("GPIO_A : ");
-	Serial.print(conf, BIN);
-	Serial.println();
-
-	conf = mcp.readRegister(MCP23017Register::GPIO_B);
-	Serial.print("GPIO_B : ");
-	Serial.print(conf, BIN);
-	Serial.println();
-
-	conf = mcp.readRegister(MCP23017Register::OLAT_A);
-	Serial.print("OLAT_A : ");
-	Serial.print(conf, BIN);
-	Serial.println();
-
-	conf = mcp.readRegister(MCP23017Register::OLAT_B);
-	Serial.print("OLAT_B : ");
-	Serial.print(conf, BIN);
-	Serial.println();
-}
-
-// SERCAP
-void mcp1aTest() {
-  int b = 0;
-  for (int i = 0; i <= 7; i++) {
-    b = 2 ^ i;
-    mcp1.writePort(MCP23017Port::A, b);
-    delay(2000); 
+void ServerTask(void *pvParameters) {
+  taskCount++;
+  while (true) {
+    // Update the server task core indicators
+    server.handleClient();
+    vTaskDelay(pdMS_TO_TICKS(10));
   }
 }
 
-// SERIND 0-4,67
-void mcp1bTest() {
-  int b = 0;
-  for (int i = 0; i <= 4; i++) {
-    b = 2 ^ i;
-    mcp1.writePort(MCP23017Port::B, b);
-    delay(2000); 
+
+void IR_Sensor_Function(void *pvParameters) {
+  taskCount++;
+//  pinMode(IR_SENSOR_PIN, INPUT);
+
+  while (1) {
+    // Read data from the analog IR sensor
+    int irSensorValue ; //= analogRead(IR_SENSOR_PIN);
+
+    // Process the sensor data
+    if (irSensorValue < 500) {
+      Serial.println("IR sensor detected an obstacle!");
+    } else {
+      Serial.println("No obstacle detected.");
+    }
+    vTaskDelay(pdMS_TO_TICKS(50));  // Adjust the delay as needed
   }
-  mcp1.writePort(MCP23017Port::B, b);
-  delay(2000); 
+  
 }
 
-// PARIND 0-5,7
-void mcp2aTest() {
-  for (int i = 0; i <= 5; i++) {
-    b = 2 ^ i;
-    mcp2.writePort(MCP23017Port::A, b);
-    delay(2000); 
+void DHT_Sensor_Function(void *pvParameters) {
+  taskCount++;
+  while (1) {
+    temperatureDHT = dht.readTemperature();
+    humidityDHT = dht.readHumidity();
+
+    Serial.print("Task2 - Temperature: ");
+    Serial.print(temperatureDHT);
+    Serial.print(" °C, Humidity: ");
+    Serial.print(humidityDHT);
+    Serial.println(" %");
+    // Update the server with temperature and humidity values
+    SendXML(); 
+    Serial.println("Task2 - display is updated");
+    vTaskDelay(pdMS_TO_TICKS(100));  // Adjust the delay as needed
   }
-  mcp2.writePort(MCP23017Port::A, b & parind.bits.b7);
-  delay(2000); 
+  
 }
 
-// DETECT
-void mcp2bTest() {
-  uint8_t b;
-  b = mcp2.readRegister(MCP23017Register::IODIR_B);
-  Serial.printf("Read : %x", b)
+void Emergency_Function(void *pvParameters) {
+  taskCount++;
+  //pinMode(ULTRASONIC_TRIGGER_PIN, OUTPUT);
+//  pinMode(ULTRASONIC_ECHO_PIN, INPUT);
+//  pinMode(BUZZER_PIN, OUTPUT);
+
+  while (1) {
+    // Trigger ultrasonic sensor
+//    digitalWrite(ULTRASONIC_TRIGGER_PIN, LOW);
+    delayMicroseconds(2);
+//    digitalWrite(ULTRASONIC_TRIGGER_PIN, HIGH);
+    delayMicroseconds(10);
+//    digitalWrite(ULTRASONIC_TRIGGER_PIN, LOW);
+
+    // Read the ultrasonic sensor echo
+    long duration; // = pulseIn(ULTRASONIC_ECHO_PIN, HIGH);
+    // Calculate distance in centimeters
+    float distance = duration * 0.034 / 2;
+    Serial.print("Distance: ");
+    Serial.println(distance);
+    char a= Serial.read();
+    // Check if an obstacle is detected (adjust the distance threshold as needed)
+    if (distance < 20) {
+    // if (a == 'E') {
+      // Activate emergency mode only if not already active
+      if (!emergencyShutdownActive) {
+        emergencyShutdownActive = true;
+        EmergencyShutdown();
+//        digitalWrite(BUZZER_PIN, HIGH);
+      }
+    } else {
+      // Deactivate emergency mode only if it was active
+      if (emergencyShutdownActive) {
+        emergencyShutdownActive = false;
+//        digitalWrite(BUZZER_PIN, LOW);
+        // Add any post-emergency code here if needed
+      }
+    }
+    
+    vTaskDelay(pdMS_TO_TICKS(100));  // Adjust the delay as needed
+  }
+}
+
+void EmergencyShutdown() {
+  // Execute emergency shutdown procedures
+    Serial.println("Task3 - EMERGENCY protocol is being executed...");
+  // Send XML data to update the server
+  server.send(200, "text/plain", "");
 }
