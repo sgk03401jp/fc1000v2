@@ -4,8 +4,7 @@
 #include <ESPmDNS.h>
 #include "MyWiFiSettings.h"
 #include "MyWebserver.h"
-#include "DHT.h"
-#include <Adafruit_Sensor.h>
+#include "Adafruit_HDC1000.h"
 
 //#define PIN_OUTPUT 5
 //#define PIN_FAN 5
@@ -25,7 +24,7 @@
 
 WebServer server(80);
 
-DHT dht(DHT_PIN, DHT_TYPE);
+Adafruit_HDC1000 hdc = Adafruit_HDC1000();
 
 TaskHandle_t mainTask;
 TaskHandle_t serverTask;
@@ -101,10 +100,10 @@ void setup(void) {
     Serial.println("MDNS responder started");
   }
 
-//  server.on("/", handleRoot);
-//  server.on("/inline", []() {
-//    server.send(200, "text/plain", "this works as well");
-//  });
+  if (!hdc.begin()) {
+    Serial.println("Couldn't find sensor!");
+    while (1);
+  }
 
   server.onNotFound(handleNotFound);
 
@@ -117,16 +116,13 @@ void setup(void) {
   server.begin();
   Serial.println("HTTP server started");
 
-  xTaskCreateUniversal(ADC_Function, "mainTask", 8192, NULL, 1, &mainTask, 0);
-
+  xTaskCreateUniversal(ADC_Function,        "mainTask",   8192, NULL, 1, &mainTask, 0);
   // Create FreeRTOS tasks
-  xTaskCreateUniversal(IR_Sensor_Function, "Task1", 8192, NULL, 2, &Task1Handle, 0);
-  xTaskCreateUniversal(DHT_Sensor_Function, "Task2", 8192, NULL, 2, &Task2Handle, 0);
-  xTaskCreateUniversal(Emergency_Function, "Task3", 8192, NULL, 3, &Task3Handle, 0);
-
+  xTaskCreateUniversal(IR_Sensor_Function,  "Task1",      8192, NULL, 2, &Task1Handle, 0);
+  xTaskCreateUniversal(DHT_Sensor_Function, "Task2",      8192, NULL, 2, &Task2Handle, 0);
+  xTaskCreateUniversal(Emergency_Function,  "Task3",      8192, NULL, 3, &Task3Handle, 0);
   // Create a server task pinned to core 1
-  xTaskCreateUniversal(ServerTask, "serverTask", 4096, NULL, 3, &serverTask, 1);
-
+  xTaskCreateUniversal(ServerTask,          "serverTask", 4096, NULL, 3, &serverTask, 1);
 }
 
 void loop(void) {
@@ -293,8 +289,8 @@ void IR_Sensor_Function(void *pvParameters) {
 void DHT_Sensor_Function(void *pvParameters) {
   taskCount++;
   while (1) {
-    temperatureDHT = dht.readTemperature();
-    humidityDHT = dht.readHumidity();
+    temperatureDHT = hdc.readTemperature();
+    humidityDHT = hdc.readHumidity();
 
     Serial.print("Task2 - Temperature: ");
     Serial.print(temperatureDHT);
@@ -304,9 +300,8 @@ void DHT_Sensor_Function(void *pvParameters) {
     // Update the server with temperature and humidity values
     SendXML(); 
     Serial.println("Task2 - display is updated");
-    vTaskDelay(pdMS_TO_TICKS(100));  // Adjust the delay as needed
+    vTaskDelay(pdMS_TO_TICKS(1000));  // Adjust the delay as needed
   }
-  
 }
 
 void Emergency_Function(void *pvParameters) {
