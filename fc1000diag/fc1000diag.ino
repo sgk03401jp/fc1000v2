@@ -27,7 +27,7 @@ WebServer server(80);
 
 Adafruit_HDC1000 hdc = Adafruit_HDC1000();
 
-struct bitfield {
+struct bf {
   uint8_t b0 : 1;
   uint8_t b1 : 1;
   uint8_t b2 : 1;
@@ -38,24 +38,15 @@ struct bitfield {
   uint8_t b7 : 1;
 };
 
-union SERCAP {
+union bm {
   uint8_t   byte;
-  bitfield  bits;
+  bf  bits;
 };
 
-union SERIND {
-  uint8_t   byte;
-  bitfield  bits;
-};
-
-union PARIND {
-  uint8_t   byte;
-  bitfield  bits;
-};
-
-SERCAP sercap;
-SERIND serind;
-PARIND parind;
+bm sercap;
+bm serind;
+bm parind;
+bm sensor;
 
 TaskHandle_t mainTask;
 TaskHandle_t serverTask;
@@ -66,13 +57,20 @@ TaskHandle_t Task3Handle = NULL;
 void ADC_Function(void *pvParameters);
 
 void UpdateSlider();
+void SendXML();
+void SendWebsite();
 void ProcessButton_0();
 void ProcessButton_1();
 void ProcessButton_101();
 void ProcessButton_103();
 void ProcessButton_104();
-void SendXML();
-void SendWebsite();
+void ProcessButton_105();
+void ProcessButton_106();
+void ProcessButton_107();
+void ProcessButton_108();
+void ProcessButton_109();
+void ProcessButton_110();
+void ProcessButton_111();
 
 //const int led = 13;
 int BitsA0 = 0, BitsA1 = 0;
@@ -88,11 +86,13 @@ int taskCount = 0;
 char XML[2048];
 char buf[32];
 
+#if 0
 void handleRoot() {
 //  digitalWrite(led, 1);
   server.send(200, "text/plain", "hello from esp32!");
 //  digitalWrite(led, 0);
 }
+#endif
 
 void handleNotFound() {
 //  digitalWrite(led, 1);
@@ -150,6 +150,15 @@ void setup(void) {
   server.on("/BUTTON_103", ProcessButton_103);  
   server.on("/BUTTON_104", ProcessButton_104);  
 
+  server.on("/BUTTON_105", ProcessButton_105);  
+  server.on("/BUTTON_106", ProcessButton_106);  
+  server.on("/BUTTON_107", ProcessButton_107);  
+  server.on("/BUTTON_108", ProcessButton_108);  
+  server.on("/BUTTON_109", ProcessButton_109);  
+  server.on("/BUTTON_110", ProcessButton_110);  
+  server.on("/BUTTON_111", ProcessButton_111);  
+
+
   server.begin();
   Serial.println("HTTP server started");
 
@@ -189,7 +198,7 @@ void UpdateSlider() {
   Serial.println(FanSpeed);
 
   // Map FanSpeed to LED brightness
-  int ledBrightness = map(FanSpeed, 0, 255, 0, 255);
+  int ledBrightness = map(FanSpeed, 100, 5000, 100, 5000);
 
   // Set LED brightness 
 //  analogWrite(PIN_FAN, ledBrightness);
@@ -218,7 +227,7 @@ void ProcessButton_1() {
 void ProcessButton_101() {
   parind.bits.b7 = !parind.bits.b7;
   Serial.print("Button 101 ");
-  Serial.println(sercap.byte);
+  Serial.println(serind.byte);
   server.send(200, "text/plain", "");
 }
 
@@ -232,9 +241,54 @@ void ProcessButton_103() {
 void ProcessButton_104() {
   serind.bits.b7 = !serind.bits.b7;
   Serial.print("Button 104 ");
+  Serial.println(serind.byte);
+  server.send(200, "text/plain", "");
+}
+
+void ProcessButton_105() {
+  sercap.bits.b0 = !sercap.bits.b0;
+  Serial.print("Button 105 ");
   Serial.println(sercap.byte);
   server.send(200, "text/plain", "");
 }
+void ProcessButton_106() {
+  sercap.bits.b1 = !sercap.bits.b1;
+  Serial.print("Button 106 ");
+  Serial.println(sercap.byte);
+  server.send(200, "text/plain", "");
+}
+void ProcessButton_107() {
+  sercap.bits.b2 = !sercap.bits.b2;
+  Serial.print("Button 107 ");
+  Serial.println(sercap.byte);
+  server.send(200, "text/plain", "");
+}
+void ProcessButton_108() {
+  sercap.bits.b3 = !sercap.bits.b3;
+  Serial.print("Button 108 ");
+  Serial.println(sercap.byte);
+  server.send(200, "text/plain", "");
+}
+void ProcessButton_109() {
+  sercap.bits.b4 = !sercap.bits.b4;
+  Serial.print("Button 109 ");
+  Serial.println(sercap.byte);
+  server.send(200, "text/plain", "");
+}
+void ProcessButton_110() {
+  sercap.bits.b5 = !sercap.bits.b5;
+  Serial.print("Button 110 ");
+  Serial.println(sercap.byte);
+  server.send(200, "text/plain", "");
+}
+void ProcessButton_111() {
+  sercap.bits.b6 = !serind.bits.b6;
+  Serial.print("Button 111 ");
+  Serial.println(sercap.byte);
+  server.send(200, "text/plain", "");
+}
+
+
 
 void SendWebsite() {
   Serial.println("sending web page");
@@ -256,6 +310,37 @@ void SendXML() {
     strcat(XML, "<LED>1</LED>\n");
   } else {
     strcat(XML, "<LED>0</LED>\n");
+  }
+
+  if (sensor.bits.b0) {
+  strcat(XML, "<SWR1>1</SWR1>\n");
+  } else{
+  strcat(XML, "<SWR1>0</SWR1>\n");
+  }
+  if (sensor.bits.b1) {
+  strcat(XML, "<SWR2>1</SWR2>\n");
+  } else{
+  strcat(XML, "<SWR2>0</SWR2>\n");
+  }
+  if (sensor.bits.b2) {
+  strcat(XML, "<SWR3>1</SWR3>\n");
+  } else{
+  strcat(XML, "<SWR3>0</SWR3>\n");
+  }
+  if (sensor.bits.b3) {
+  strcat(XML, "<HIZ>1</HIZ>\n");
+  } else{
+  strcat(XML, "<HIZ>0</HIZ>\n");
+  }
+  if (sensor.bits.b4) {
+  strcat(XML, "<PHI>1</PHI>\n");
+  } else{
+  strcat(XML, "<PHI>0</PHI>\n");
+  }
+  if (sensor.bits.b5) {
+  strcat(XML, "<PWR3>1</PWR3>\n");
+  } else{
+  strcat(XML, "<PWR3>0</PWR3>\n");
   }
 
   if (SomeOutput) {
@@ -282,11 +367,48 @@ void SendXML() {
   strcat(XML, "<RL104>0</RL104>\n");
   }
 
-#if 0
-  strcat(XML, "<RL103>1</RL103>\n");
+  if (serind.bits.b0) {
+  strcat(XML, "<RL105>1</RL105>\n");
+  } else{
+  strcat(XML, "<RL105>0</RL105>\n");
+  }
 
-  strcat(XML, "<RL104>1</RL104>\n");
-#endif
+    if (serind.bits.b1) {
+  strcat(XML, "<RL106>1</RL106>\n");
+  } else{
+  strcat(XML, "<RL106>0</RL106>\n");
+  }
+
+    if (serind.bits.b2) {
+  strcat(XML, "<RL107>1</RL107>\n");
+  } else{
+  strcat(XML, "<RL107>0</RL107>\n");
+  }
+
+  if (serind.bits.b3) {
+  strcat(XML, "<RL108>1</RL108>\n");
+  } else{
+  strcat(XML, "<RL108>0</RL108>\n");
+  }
+
+  if (serind.bits.b4) {
+  strcat(XML, "<RL109>1</RL109>\n");
+  } else{
+  strcat(XML, "<RL109>0</RL109>\n");
+  }
+
+  if (serind.bits.b5) {
+  strcat(XML, "<RL110>1</RL110>\n");
+  } else{
+  strcat(XML, "<RL110>0</RL110>\n");
+  }
+
+  if (sercap.bits.b6) {
+  strcat(XML, "<RL111>1</RL111>\n");
+  } else{
+  strcat(XML, "<RL111>0</RL111>\n");
+  }
+
   strcat(XML, "<EMERGENCY_MODE>");
   if (emergencyShutdownActive) {
     strcat(XML, "1");

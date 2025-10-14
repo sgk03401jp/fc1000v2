@@ -251,6 +251,30 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
         <td><div class="tabledata" id = "v1"></div></td>
       </tr>
       <tr>
+        <td><div class="bodytext">SWR1</div></td>
+        <td><div class="tabledata" id = "swr1"></div></td>
+      </tr>
+      <tr>
+        <td><div class="bodytext">SWR2</div></td>
+        <td><div class="tabledata" id = "swr2"></div></td>
+      </tr>
+      <tr>
+        <td><div class="bodytext">SWR3</div></td>
+        <td><div class="tabledata" id = "swr3"></div></td>
+      </tr>
+      <tr>
+        <td><div class="bodytext">Hiz</div></td>
+        <td><div class="tabledata" id = "hiz"></div></td>
+      </tr>
+      <tr>
+        <td><div class="bodytext">Phi</div></td>
+        <td><div class="tabledata" id = "phi"></div></td>
+      </tr>
+      <tr>
+        <td><div class="bodytext">Power</div></td>
+        <td><div class="tabledata" id = "pwr3"></div></td>
+      </tr>
+      <tr>
         <td><div class="bodytext">Digital switch</div></td>
         <td><div class="tabledata" id = "switch"></div></td>
       </tr>
@@ -265,6 +289,34 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       <tr>
         <td><div class="bodytext">RL104</div></td>
         <td><div class="tabledata" id = "rl104"></div></td>
+      </tr>
+      <tr>
+        <td><div class="bodytext">RL105</div></td>
+        <td><div class="tabledata" id = "rl105"></div></td>
+      </tr>
+      <tr>
+        <td><div class="bodytext">RL106</div></td>
+        <td><div class="tabledata" id = "rl106"></div></td>
+      </tr>
+      <tr>
+        <td><div class="bodytext">RL107</div></td>
+        <td><div class="tabledata" id = "rl107"></div></td>
+      </tr>
+      <tr>
+        <td><div class="bodytext">RL108</div></td>
+        <td><div class="tabledata" id = "rl108"></div></td>
+      </tr>
+      <tr>
+        <td><div class="bodytext">RL109</div></td>
+        <td><div class="tabledata" id = "rl109"></div></td>
+      </tr>
+      <tr>
+        <td><div class="bodytext">RL110</div></td>
+        <td><div class="tabledata" id = "rl110"></div></td>
+      </tr>
+      <tr>
+        <td><div class="bodytext">RL111</div></td>
+        <td><div class="tabledata" id = "rl111"></div></td>
       </tr>
       <tr>
         <td><div class="bodytext">Emergency Mode</div></td>
@@ -301,7 +353,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
               <div id="taskCount" class="circle-data"></div>
             </div>
           </div>
-            <!-- Add this section for DHT11 live readings -->
+            <!-- Add this section for HDC1000 live readings -->
           <div style="margin-top: 20px;">
             <div class="category">Live Readings</div>
             <table style="width:50%">
@@ -349,6 +401,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
     <button type="button" class = "btn" id = "btn1" onclick="ButtonPress1()">Toggle</button>
     </div>
     <br>
+
     <div class="bodytext">RL101</div>
     <button type="button" class = "btn" id = "btn101" onclick="ButtonPress101()">Toggle</button>
     </div>
@@ -361,6 +414,37 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
     <button type="button" class = "btn" id = "btn104" onclick="ButtonPress104()">Toggle</button>
     </div>
     <br>
+
+    <div class="bodytext">RL105</div>
+    <button type="button" class = "btn" id = "btn105" onclick="ButtonPress105()">Toggle</button>
+    </div>
+    <br>
+    <div class="bodytext">RL106</div>
+    <button type="button" class = "btn" id = "btn106" onclick="ButtonPress106()">Toggle</button>
+    </div>
+    <br>
+    <div class="bodytext">RL107</div>
+    <button type="button" class = "btn" id = "btn107" onclick="ButtonPress107()">Toggle</button>
+    </div>
+    <br>
+    <div class="bodytext">RL108</div>
+    <button type="button" class = "btn" id = "btn108" onclick="ButtonPress108()">Toggle</button>
+    </div>
+    <br>
+    <div class="bodytext">RL109</div>
+    <button type="button" class = "btn" id = "btn109" onclick="ButtonPress109()">Toggle</button>
+    </div>
+    <br>
+    <div class="bodytext">RL110</div>
+    <button type="button" class = "btn" id = "btn110" onclick="ButtonPress110()">Toggle</button>
+    </div>
+    <br>
+    <div class="bodytext">RL111</div>
+    <button type="button" class = "btn" id = "btn111" onclick="ButtonPress111()">Toggle</button>
+    </div>
+    <br>
+
+
     <br>
     <div class="bodytext">Relay Speed Control (ms: <span id="fanrpm"></span>)</div>
     <br>
@@ -449,6 +533,43 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       xhttp.send(); 
     }    
 
+    function ButtonPress105() {
+      var xhttp = new XMLHttpRequest(); 
+      xhttp.open("PUT", "BUTTON_105", false);
+      xhttp.send(); 
+    }  
+    function ButtonPress106() {
+      var xhttp = new XMLHttpRequest(); 
+      xhttp.open("PUT", "BUTTON_106", false);
+      xhttp.send(); 
+    }  
+    function ButtonPress107() {
+      var xhttp = new XMLHttpRequest(); 
+      xhttp.open("PUT", "BUTTON_107", false);
+      xhttp.send(); 
+    }  
+    function ButtonPress108() {
+      var xhttp = new XMLHttpRequest(); 
+      xhttp.open("PUT", "BUTTON_108", false);
+      xhttp.send(); 
+    }  
+    function ButtonPress109() {
+      var xhttp = new XMLHttpRequest(); 
+      xhttp.open("PUT", "BUTTON_109", false);
+      xhttp.send(); 
+    }
+    function ButtonPress110() {
+      var xhttp = new XMLHttpRequest(); 
+      xhttp.open("PUT", "BUTTON_110", false);
+      xhttp.send(); 
+    }  
+    function ButtonPress111() {
+      var xhttp = new XMLHttpRequest(); 
+      xhttp.open("PUT", "BUTTON_111", false);
+      xhttp.send(); 
+    }  
+
+
     function UpdateSlider(value) {
       var xhttp = new XMLHttpRequest();
       // this time i want immediate feedback to the fan speed
@@ -482,11 +603,11 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
      
       // get the xml stream
       xmlResponse=xmlHttp.responseXML;
-  
+
       // get host date and time
       document.getElementById("time").innerHTML = dt.toLocaleTimeString();
       document.getElementById("date").innerHTML = dt.toLocaleDateString();
-  
+
       // A0
       xmldoc = xmlResponse.getElementsByTagName("B0"); //bits for A0
       message = xmldoc[0].firstChild.nodeValue;
@@ -538,14 +659,84 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
   
       xmldoc = xmlResponse.getElementsByTagName("LED");
       message = xmldoc[0].firstChild.nodeValue;
-  
+      document.getElementById("switch").style.backgroundColor="rgb(200,200,200)";
       if (message == 0){
         document.getElementById("btn0").innerHTML="Turn ON";
       }
       else{
         document.getElementById("btn0").innerHTML="Turn OFF";
       }
-         
+
+      xmldoc = xmlResponse.getElementsByTagName("SWR1");
+      message = xmldoc[0].firstChild.nodeValue;
+      document.getElementById("switch").style.backgroundColor="rgb(200,200,200)";
+      if (message == 0){
+        document.getElementById("swr1").innerHTML="Over 1.5";
+        document.getElementById("switch").style.color="#0000AA"; 
+      }
+      else{
+        document.getElementById("swr1").innerHTML="Less 1.5";
+        document.getElementById("switch").style.color="#00AA00";
+      }
+      xmldoc = xmlResponse.getElementsByTagName("SWR2");
+      message = xmldoc[0].firstChild.nodeValue;
+      document.getElementById("switch").style.backgroundColor="rgb(200,200,200)";
+      if (message == 0){
+        document.getElementById("swr2").innerHTML="Over 2";
+        document.getElementById("switch").style.color="#0000AA"; 
+      }
+      else{
+        document.getElementById("swr2").innerHTML="Less 2";
+        document.getElementById("switch").style.color="#00AA00";
+      }
+      xmldoc = xmlResponse.getElementsByTagName("SWR3");
+      message = xmldoc[0].firstChild.nodeValue;
+      document.getElementById("switch").style.backgroundColor="rgb(200,200,200)";
+      if (message == 0){
+        document.getElementById("swr3").innerHTML="Over 3";
+        document.getElementById("switch").style.color="#0000AA"; 
+      }
+      else{
+        document.getElementById("swr3").innerHTML="Less 3";
+        document.getElementById("switch").style.color="#00AA00";
+      }
+
+      xmldoc = xmlResponse.getElementsByTagName("HIZ");
+      message = xmldoc[0].firstChild.nodeValue;
+      document.getElementById("switch").style.backgroundColor="rgb(200,200,200)";
+      if (message == 0){
+        document.getElementById("hiz").innerHTML="Over 50";
+        document.getElementById("switch").style.color="#0000AA"; 
+      }
+      else{
+        document.getElementById("hiz").innerHTML="Less 50";
+        document.getElementById("switch").style.color="#00AA00";
+      }
+
+      xmldoc = xmlResponse.getElementsByTagName("PHI");
+      message = xmldoc[0].firstChild.nodeValue;
+      document.getElementById("switch").style.backgroundColor="rgb(200,200,200)";
+      if (message == 0){
+        document.getElementById("phi").innerHTML="Inductive";
+        document.getElementById("switch").style.color="#0000AA"; 
+      }
+      else{
+        document.getElementById("phi").innerHTML="Capacitive";
+        document.getElementById("switch").style.color="#00AA00";
+      }
+
+      xmldoc = xmlResponse.getElementsByTagName("PWR3");
+      message = xmldoc[0].firstChild.nodeValue;
+      document.getElementById("switch").style.backgroundColor="rgb(200,200,200)";
+      if (message == 0){
+        document.getElementById("pwr3").innerHTML="Over 3W";
+        document.getElementById("switch").style.color="#0000AA"; 
+      }
+      else{
+        document.getElementById("pwr3").innerHTML="Less 3W";
+        document.getElementById("switch").style.color="#00AA00";
+      }
+
       xmldoc = xmlResponse.getElementsByTagName("SWITCH");
       message = xmldoc[0].firstChild.nodeValue;
       document.getElementById("switch").style.backgroundColor="rgb(200,200,200)";
@@ -564,8 +755,6 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       xmldoc = xmlResponse.getElementsByTagName("RL101");
       message = xmldoc[0].firstChild.nodeValue;
       document.getElementById("rl101").style.backgroundColor="rgb(200,200,200)";
-      // update the text in the table
-
       if (message == 0){
         document.getElementById("rl101").innerHTML="Switch is OFF";
         document.getElementById("btn101").innerHTML="Turn ON";
@@ -580,7 +769,6 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       xmldoc = xmlResponse.getElementsByTagName("RL103");
       message = xmldoc[0].firstChild.nodeValue;
       document.getElementById("btn103").style.backgroundColor="rgb(200,200,200)";
-      // update the text in the table
       if (message == 0){
         document.getElementById("rl103").innerHTML="Switch is OFF";
         document.getElementById("btn103").innerHTML="Turn ON";
@@ -595,7 +783,6 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       xmldoc = xmlResponse.getElementsByTagName("RL104");
       message = xmldoc[0].firstChild.nodeValue;
       document.getElementById("btn104").style.backgroundColor="rgb(200,200,200)";
-      // update the text in the table
       if (message == 0){
         document.getElementById("rl104").innerHTML="Switch is OFF";
         document.getElementById("btn104").innerHTML="Turn ON";
@@ -605,6 +792,104 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
         document.getElementById("rl104").innerHTML="Switch is ON";
         document.getElementById("btn104").innerHTML="Turn OFF";
         document.getElementById("rl104").style.color="#00AA00";
+      }
+
+      xmldoc = xmlResponse.getElementsByTagName("RL105");
+      message = xmldoc[0].firstChild.nodeValue;
+      document.getElementById("btn105").style.backgroundColor="rgb(200,200,200)";
+      if (message == 0){
+        document.getElementById("rl105").innerHTML="Switch is OFF";
+        document.getElementById("btn105").innerHTML="Turn ON";
+        document.getElementById("rl105").style.color="#0000AA"; 
+      }
+      else {
+        document.getElementById("rl105").innerHTML="Switch is ON";
+        document.getElementById("btn105").innerHTML="Turn OFF";
+        document.getElementById("rl105").style.color="#00AA00";
+      }
+
+      xmldoc = xmlResponse.getElementsByTagName("RL106");
+      message = xmldoc[0].firstChild.nodeValue;
+      document.getElementById("btn106").style.backgroundColor="rgb(200,200,200)";
+      if (message == 0){
+        document.getElementById("rl106").innerHTML="Switch is OFF";
+        document.getElementById("btn106").innerHTML="Turn ON";
+        document.getElementById("rl106").style.color="#0000AA"; 
+      }
+      else {
+        document.getElementById("rl106").innerHTML="Switch is ON";
+        document.getElementById("btn106").innerHTML="Turn OFF";
+        document.getElementById("rl106").style.color="#00AA00";
+      }
+
+      xmldoc = xmlResponse.getElementsByTagName("RL107");
+      message = xmldoc[0].firstChild.nodeValue;
+      document.getElementById("btn107").style.backgroundColor="rgb(200,200,200)";
+      if (message == 0){
+        document.getElementById("rl107").innerHTML="Switch is OFF";
+        document.getElementById("btn107").innerHTML="Turn ON";
+        document.getElementById("rl107").style.color="#0000AA"; 
+      }
+      else {
+        document.getElementById("rl107").innerHTML="Switch is ON";
+        document.getElementById("btn107").innerHTML="Turn OFF";
+        document.getElementById("rl107").style.color="#00AA00";
+      }
+
+      xmldoc = xmlResponse.getElementsByTagName("RL108");
+      message = xmldoc[0].firstChild.nodeValue;
+      document.getElementById("btn108").style.backgroundColor="rgb(200,200,200)";
+      if (message == 0){
+        document.getElementById("rl108").innerHTML="Switch is OFF";
+        document.getElementById("btn108").innerHTML="Turn ON";
+        document.getElementById("rl108").style.color="#0000AA"; 
+      }
+      else {
+        document.getElementById("rl108").innerHTML="Switch is ON";
+        document.getElementById("btn108").innerHTML="Turn OFF";
+        document.getElementById("rl108").style.color="#00AA00";
+      }
+
+      xmldoc = xmlResponse.getElementsByTagName("RL109");
+      message = xmldoc[0].firstChild.nodeValue;
+      document.getElementById("btn109").style.backgroundColor="rgb(200,200,200)";
+      if (message == 0){
+        document.getElementById("rl109").innerHTML="Switch is OFF";
+        document.getElementById("btn109").innerHTML="Turn ON";
+        document.getElementById("rl109").style.color="#0000AA"; 
+      }
+      else {
+        document.getElementById("rl109").innerHTML="Switch is ON";
+        document.getElementById("btn109").innerHTML="Turn OFF";
+        document.getElementById("rl109").style.color="#00AA00";
+      }
+
+      xmldoc = xmlResponse.getElementsByTagName("RL110");
+      message = xmldoc[0].firstChild.nodeValue;
+      document.getElementById("btn110").style.backgroundColor="rgb(200,200,200)";
+      if (message == 0){
+        document.getElementById("rl110").innerHTML="Switch is OFF";
+        document.getElementById("btn110").innerHTML="Turn ON";
+        document.getElementById("rl110").style.color="#0000AA"; 
+      }
+      else {
+        document.getElementById("rl110").innerHTML="Switch is ON";
+        document.getElementById("btn110").innerHTML="Turn OFF";
+        document.getElementById("rl110").style.color="#00AA00";
+      }
+
+      xmldoc = xmlResponse.getElementsByTagName("RL111");
+      message = xmldoc[0].firstChild.nodeValue;
+      document.getElementById("btn111").style.backgroundColor="rgb(200,200,200)";
+      if (message == 0){
+        document.getElementById("rl111").innerHTML="Switch is OFF";
+        document.getElementById("btn111").innerHTML="Turn ON";
+        document.getElementById("rl111").style.color="#0000AA"; 
+      }
+      else {
+        document.getElementById("rl111").innerHTML="Switch is ON";
+        document.getElementById("btn111").innerHTML="Turn OFF";
+        document.getElementById("rl111").style.color="#00AA00";
       }
 
       // Add this part to update the content of the Emergency Mode cell

@@ -20,7 +20,7 @@
 | b1 | RL119
 | b2 | RL120
 | b3 | RL121
-| b4 |RL122
+| b4 | RL122
 | b5 | 
 | b6 | RL103
 | b7 | RL104
@@ -36,6 +36,18 @@
 | b5 | RL117
 | b6 | 
 | b7 | RL101,RL102
+
+### sensor
+| bit | Relay
+|---|---
+| b0 | SWR 1
+| b1 | SWR 2
+| b2 | SWR 3
+| b3 | Z(HiZ)
+| b4 | Phi
+| b5 | PWR 3
+| b6 | 
+| b7 | 
 
 ![alt text](image/ScreenShot.png)
 
