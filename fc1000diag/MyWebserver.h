@@ -59,7 +59,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
 <!DOCTYPE html>
 <html lang="en" class="js-focus-visible">
 
-<title>Web Page Update Demo</title>
+<title>FC1000 Antenna Tuner Diag Mode</title>
 
   <style>
     table {
@@ -214,7 +214,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
     <header>
       <div class="navbar fixed-top">
           <div class="container">
-            <div class="navtitle">FC1000 Antenna Tuner</div>
+            <div class="navtitle">FC1000 Antenna Tuner Diag Mode</div>
             <div class="navdata" id = "date">mm/dd/yyyy</div>
             <div class="navheading">DATE</div><br>
             <div class="navdata" id = "time">00:00:00</div>
@@ -279,49 +279,114 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
         <td><div class="tabledata" id = "switch"></div></td>
       </tr>
       <tr>
-        <td><div class="bodytext">RL101</div></td>
-        <td><div class="tabledata" id = "rl101"></div></td>
+        <td><div class="bodytext">Emergency Mode</div></td>
+        <td><div class="tabledata" id="emergencyMode"></div>
+        </td>
       </tr>
-      <tr>
-        <td><div class="bodytext">RL103</div></td>
-        <td><div class="tabledata" id = "rl103"></div></td>
-      </tr>
-      <tr>
-        <td><div class="bodytext">RL104</div></td>
-        <td><div class="tabledata" id = "rl104"></div></td>
-      </tr>
+</table>
+<br>
+      <table>
+      <colgroup>
+        <col span="1" ; width: 15%; color:#000000 ;">
+        <col span="1" ; width: 10%; color:#000000 ;">
+        <col span="1" ; width: 10%; color:#000000 ;">
+        <col span="1" ; width: 15%; color:#000000 ;">
+        <col span="1" ; width: 10%; color:#000000 ;">
+        <col span="1" ; width: 10%; color:#000000 ;">
+        <col span="1" ; width: 15%; color:#000000 ;">
+        <col span="1" ; width: 10%; color:#000000 ;">
+        <col span="1" ; width: 10%; color:#000000 ;">
+      </colgroup>
       <tr>
         <td><div class="bodytext">RL105</div></td>
         <td><div class="tabledata" id = "rl105"></div></td>
+        <td><button type="button" class = "btn" id = "btn105" onclick="ButtonPress105()">Toggle</button></td>
+        
+        <td><div class="bodytext">RL118</div></td>
+        <td><div class="tabledata" id = "rl118"></div></td>
+        <td><button type="button" class = "btn" id = "btn118" onclick="ButtonPress118()">Toggle</button></td>
+        
+        <td><div class="bodytext">RL112</div></td>
+        <td><div class="tabledata" id = "rl112"></div></td>
+        <td><button type="button" class = "btn" id = "btn112" onclick="ButtonPress112()">Toggle</button></td>
       </tr>
       <tr>
         <td><div class="bodytext">RL106</div></td>
         <td><div class="tabledata" id = "rl106"></div></td>
+        <td><button type="button" class = "btn" id = "btn106" onclick="ButtonPress106()">Toggle</button></td>
+        
+        <td><div class="bodytext">RL119</div></td>
+        <td><div class="tabledata" id = "rl119"></div></td>
+        <td><button type="button" class = "btn" id = "btn119" onclick="ButtonPress119()">Toggle</button></td>
+        
+        <td><div class="bodytext">RL113</div></td>
+        <td><div class="tabledata" id = "rl113"></div></td>
+        <td><button type="button" class = "btn" id = "btn113" onclick="ButtonPress113()">Toggle</button></td>
       </tr>
       <tr>
         <td><div class="bodytext">RL107</div></td>
         <td><div class="tabledata" id = "rl107"></div></td>
+        <td><button type="button" class = "btn" id = "btn107" onclick="ButtonPress107()">Toggle</button></td>
+        
+        <td><div class="bodytext">RL120</div></td>
+        <td><div class="tabledata" id = "rl120"></div></td>
+        <td><button type="button" class = "btn" id = "btn120" onclick="ButtonPress120()">Toggle</button></td>
+        
+        <td><div class="bodytext">RL114</div></td>
+        <td><div class="tabledata" id = "rl114"></div></td>
+        <td><button type="button" class = "btn" id = "btn114" onclick="ButtonPress114()">Toggle</button></td>
       </tr>
       <tr>
         <td><div class="bodytext">RL108</div></td>
         <td><div class="tabledata" id = "rl108"></div></td>
+        <td><button type="button" class = "btn" id = "btn108" onclick="ButtonPress108()">Toggle</button></td>
+        
+        <td><div class="bodytext">RL121</div></td>
+        <td><div class="tabledata" id = "rl121"></div></td>
+        <td><button type="button" class = "btn" id = "btn121" onclick="ButtonPress121()">Toggle</button></td>
+        
+        <td><div class="bodytext">RL115</div></td>
+        <td><div class="tabledata" id = "rl115"></div></td>
+        <td><button type="button" class = "btn" id = "btn115" onclick="ButtonPress115()">Toggle</button></td>
       </tr>
       <tr>
         <td><div class="bodytext">RL109</div></td>
         <td><div class="tabledata" id = "rl109"></div></td>
+        <td><button type="button" class = "btn" id = "btn109" onclick="ButtonPress109()">Toggle</button></td>
+        
+        <td><div class="bodytext">RL122</div></td>
+        <td><div class="tabledata" id = "rl122"></div></td>
+        <td><button type="button" class = "btn" id = "btn122" onclick="ButtonPress122()">Toggle</button></td>
+        
+        <td><div class="bodytext">RL116</div></td>
+        <td><div class="tabledata" id = "rl116"></div></td>
+        <td><button type="button" class = "btn" id = "btn116" onclick="ButtonPress116()">Toggle</button></td>
       </tr>
       <tr>
         <td><div class="bodytext">RL110</div></td>
         <td><div class="tabledata" id = "rl110"></div></td>
+        <td><button type="button" class = "btn" id = "btn110" onclick="ButtonPress110()">Toggle</button></td>
+        
+        <td><div class="bodytext">RL103</div></td>
+        <td><div class="tabledata" id = "rl103"></div></td>
+        <td><button type="button" class = "btn" id = "btn103" onclick="ButtonPress103()">Toggle</button></td>
+        
+        <td><div class="bodytext">RL117</div></td>
+        <td><div class="tabledata" id = "rl117"></div></td>
+        <td><button type="button" class = "btn" id = "btn117" onclick="ButtonPress117()">Toggle</button></td>
       </tr>
       <tr>
         <td><div class="bodytext">RL111</div></td>
         <td><div class="tabledata" id = "rl111"></div></td>
-      </tr>
-      <tr>
-        <td><div class="bodytext">Emergency Mode</div></td>
-        <td><div class="tabledata" id="emergencyMode"></div>
-        </td>
+        <td><button type="button" class = "btn" id = "btn111" onclick="ButtonPress111()">Toggle</button></td>
+        
+        <td><div class="bodytext">RL104</div></td>
+        <td><div class="tabledata" id = "rl104"></div></td>
+        <td><button type="button" class = "btn" id = "btn104" onclick="ButtonPress104()">Toggle</button></td>
+        
+        <td><div class="bodytext">RL101</div></td>
+        <td><div class="tabledata" id = "rl101"></div></td>
+        <td><button type="button" class = "btn" id = "btn101" onclick="ButtonPress101()">Toggle</button></td>
       </tr>
       </table>
       <div style="float: right; width: 50%; padding: 0px 20px;">
@@ -401,49 +466,6 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
     <button type="button" class = "btn" id = "btn1" onclick="ButtonPress1()">Toggle</button>
     </div>
     <br>
-
-    <div class="bodytext">RL101</div>
-    <button type="button" class = "btn" id = "btn101" onclick="ButtonPress101()">Toggle</button>
-    </div>
-    <br>
-    <div class="bodytext">RL103</div>
-    <button type="button" class = "btn" id = "btn103" onclick="ButtonPress103()">Toggle</button>
-    </div>
-    <br>
-    <div class="bodytext">RL104</div>
-    <button type="button" class = "btn" id = "btn104" onclick="ButtonPress104()">Toggle</button>
-    </div>
-    <br>
-
-    <div class="bodytext">RL105</div>
-    <button type="button" class = "btn" id = "btn105" onclick="ButtonPress105()">Toggle</button>
-    </div>
-    <br>
-    <div class="bodytext">RL106</div>
-    <button type="button" class = "btn" id = "btn106" onclick="ButtonPress106()">Toggle</button>
-    </div>
-    <br>
-    <div class="bodytext">RL107</div>
-    <button type="button" class = "btn" id = "btn107" onclick="ButtonPress107()">Toggle</button>
-    </div>
-    <br>
-    <div class="bodytext">RL108</div>
-    <button type="button" class = "btn" id = "btn108" onclick="ButtonPress108()">Toggle</button>
-    </div>
-    <br>
-    <div class="bodytext">RL109</div>
-    <button type="button" class = "btn" id = "btn109" onclick="ButtonPress109()">Toggle</button>
-    </div>
-    <br>
-    <div class="bodytext">RL110</div>
-    <button type="button" class = "btn" id = "btn110" onclick="ButtonPress110()">Toggle</button>
-    </div>
-    <br>
-    <div class="bodytext">RL111</div>
-    <button type="button" class = "btn" id = "btn111" onclick="ButtonPress111()">Toggle</button>
-    </div>
-    <br>
-
 
     <br>
     <div class="bodytext">Relay Speed Control (ms: <span id="fanrpm"></span>)</div>
@@ -945,6 +967,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
   </script>
 
 </html>
+
 
 
 

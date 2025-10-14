@@ -7,17 +7,8 @@
 #include "Adafruit_HDC1000.h"
 #include <MCP23017.h>
 
-//#define PIN_OUTPUT 5
-//#define PIN_FAN 5
-//#define PIN_LED 4
 #define PIN_A0 0  // Forward Power
 #define PIN_A1 1  // Refrect Power
-//#define IR_SENSOR_PIN 3  
-//#define ULTRASONIC_TRIGGER_PIN 2  
-//#define ULTRASONIC_ECHO_PIN 3     
-//#define BUZZER_PIN 4              
-//#define DHT_PIN 3   
-//#define DHT_TYPE DHT11
 
 /* Actual data stored in WiFiSettings.h */
 //const char *ssid = "YOUR_SSID";
@@ -72,7 +63,6 @@ void ProcessButton_109();
 void ProcessButton_110();
 void ProcessButton_111();
 
-//const int led = 13;
 int BitsA0 = 0, BitsA1 = 0;
 float VoltsA0 = 0, VoltsA1 = 0;
 uint32_t SensorUpdate = 0;
@@ -86,16 +76,7 @@ int taskCount = 0;
 char XML[2048];
 char buf[32];
 
-#if 0
-void handleRoot() {
-//  digitalWrite(led, 1);
-  server.send(200, "text/plain", "hello from esp32!");
-//  digitalWrite(led, 0);
-}
-#endif
-
 void handleNotFound() {
-//  digitalWrite(led, 1);
   String message = "File Not Found\n\n";
   message += "URI: ";
   message += server.uri();
@@ -108,12 +89,9 @@ void handleNotFound() {
     message += " " + server.argName(i) + ": " + server.arg(i) + "\n";
   }
   server.send(404, "text/plain", message);
-//  digitalWrite(led, 0);
 }
 
 void setup(void) {
-//  pinMode(led, OUTPUT);
-//  digitalWrite(led, 0);
   Serial.begin(115200);
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
@@ -158,6 +136,21 @@ void setup(void) {
   server.on("/BUTTON_110", ProcessButton_110);  
   server.on("/BUTTON_111", ProcessButton_111);  
 
+  server.on("/BUTTON_118", ProcessButton_111);  
+  server.on("/BUTTON_119", ProcessButton_111);  
+  server.on("/BUTTON_120", ProcessButton_111);  
+  server.on("/BUTTON_121", ProcessButton_111);  
+  server.on("/BUTTON_122", ProcessButton_111);  
+  server.on("/BUTTON_103", ProcessButton_111);  
+  server.on("/BUTTON_104", ProcessButton_111);  
+
+  server.on("/BUTTON_112", ProcessButton_111);  
+  server.on("/BUTTON_113", ProcessButton_111);  
+  server.on("/BUTTON_114", ProcessButton_111);  
+  server.on("/BUTTON_115", ProcessButton_111);  
+  server.on("/BUTTON_116", ProcessButton_111);  
+  server.on("/BUTTON_117", ProcessButton_111);  
+  server.on("/BUTTON_101", ProcessButton_111);  
 
   server.begin();
   Serial.println("HTTP server started");
@@ -224,27 +217,6 @@ void ProcessButton_1() {
   server.send(200, "text/plain", "");
 }
 
-void ProcessButton_101() {
-  parind.bits.b7 = !parind.bits.b7;
-  Serial.print("Button 101 ");
-  Serial.println(serind.byte);
-  server.send(200, "text/plain", "");
-}
-
-void ProcessButton_103() {
-  serind.bits.b6 = !serind.bits.b6;
-  Serial.print("Button 103 ");
-  Serial.println(serind.byte);
-  server.send(200, "text/plain", "");
-}
-
-void ProcessButton_104() {
-  serind.bits.b7 = !serind.bits.b7;
-  Serial.print("Button 104 ");
-  Serial.println(serind.byte);
-  server.send(200, "text/plain", "");
-}
-
 void ProcessButton_105() {
   sercap.bits.b0 = !sercap.bits.b0;
   Serial.print("Button 105 ");
@@ -282,13 +254,97 @@ void ProcessButton_110() {
   server.send(200, "text/plain", "");
 }
 void ProcessButton_111() {
-  sercap.bits.b6 = !serind.bits.b6;
+  sercap.bits.b6 = !sercap.bits.b6;
   Serial.print("Button 111 ");
   Serial.println(sercap.byte);
   server.send(200, "text/plain", "");
 }
 
+void ProcessButton_118() {
+  serind.bits.b0 = !serind.bits.b0;
+  Serial.print("Button 118 ");
+  Serial.println(sercap.byte);
+  server.send(200, "text/plain", "");
+}
+void ProcessButton_119() {
+  serind.bits.b1 = !serind.bits.b1;
+  Serial.print("Button 119 ");
+  Serial.println(sercap.byte);
+  server.send(200, "text/plain", "");
+}
+void ProcessButton_120() {
+  serind.bits.b2 = !serind.bits.b2;
+  Serial.print("Button 120 ");
+  Serial.println(sercap.byte);
+  server.send(200, "text/plain", "");
+}
+void ProcessButton_121() {
+  serind.bits.b3 = !serind.bits.b3;
+  Serial.print("Button 121 ");
+  Serial.println(sercap.byte);
+  server.send(200, "text/plain", "");
+}
+void ProcessButton_122() {
+  serind.bits.b4 = !serind.bits.b4;
+  Serial.print("Button 122 ");
+  Serial.println(sercap.byte);
+  server.send(200, "text/plain", "");
+}
+void ProcessButton_103() {
+  serind.bits.b6 = !serind.bits.b6;
+  Serial.print("Button 103 ");
+  Serial.println(sercap.byte);
+  server.send(200, "text/plain", "");
+}
+void ProcessButton_104() {
+  serind.bits.b7 = !serind.bits.b7;
+  Serial.print("Button 1104 ");
+  Serial.println(sercap.byte);
+  server.send(200, "text/plain", "");
+}
 
+void ProcessButton_112() {
+  parind.bits.b0 = !parind.bits.b0;
+  Serial.print("Button 112 ");
+  Serial.println(sercap.byte);
+  server.send(200, "text/plain", "");
+}
+void ProcessButton_113() {
+  parind.bits.b1 = !parind.bits.b1;
+  Serial.print("Button 113 ");
+  Serial.println(sercap.byte);
+  server.send(200, "text/plain", "");
+}
+void ProcessButton_114() {
+  parind.bits.b2 = !parind.bits.b2;
+  Serial.print("Button 114 ");
+  Serial.println(sercap.byte);
+  server.send(200, "text/plain", "");
+}
+void ProcessButton_115() {
+  parind.bits.b3 = !parind.bits.b3;
+  Serial.print("Button 115 ");
+  Serial.println(sercap.byte);
+  server.send(200, "text/plain", "");
+}
+void ProcessButton_116() {
+  parind.bits.b4 = !parind.bits.b4;
+  Serial.print("Button 116 ");
+  Serial.println(sercap.byte);
+  server.send(200, "text/plain", "");
+}
+void ProcessButton_117() {
+  parind.bits.b5 = !parind.bits.b5;
+  Serial.print("Button 117 ");
+  Serial.println(sercap.byte);
+  server.send(200, "text/plain", "");
+}
+void ProcessButton_101() {
+  parind.bits.b7 = !parind.bits.b7;
+  Serial.print("Button 112 ");
+  Serial.println(sercap.byte);
+  server.send(200, "text/plain", "");
+}
 
 void SendWebsite() {
   Serial.println("sending web page");
