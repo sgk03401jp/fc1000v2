@@ -367,103 +367,64 @@ void SendXML() {
   } else {
     strcat(XML, "<LED>0</LED>\n");
   }
-
+#if 0
   if (sensor.bits.b0) {
   strcat(XML, "<SWR1>1</SWR1>\n");
-  } else{
+  } else {
   strcat(XML, "<SWR1>0</SWR1>\n");
   }
   if (sensor.bits.b1) {
   strcat(XML, "<SWR2>1</SWR2>\n");
-  } else{
+  } else {
   strcat(XML, "<SWR2>0</SWR2>\n");
   }
   if (sensor.bits.b2) {
   strcat(XML, "<SWR3>1</SWR3>\n");
-  } else{
+  } else {
   strcat(XML, "<SWR3>0</SWR3>\n");
   }
   if (sensor.bits.b3) {
   strcat(XML, "<HIZ>1</HIZ>\n");
-  } else{
+  } else {
   strcat(XML, "<HIZ>0</HIZ>\n");
   }
   if (sensor.bits.b4) {
   strcat(XML, "<PHI>1</PHI>\n");
-  } else{
+  } else {
   strcat(XML, "<PHI>0</PHI>\n");
   }
   if (sensor.bits.b5) {
   strcat(XML, "<PWR3>1</PWR3>\n");
-  } else{
+  } else {
   strcat(XML, "<PWR3>0</PWR3>\n");
   }
-
+#else
+sensor.byte++;
+  sprintf(buf, "<SENSOR>000%0d%0d%0d%0d%0d</SENSOR>\n", 
+    sensor.bits.b5, sensor.bits.b4, sensor.bits.b3, sensor.bits.b2,
+    sensor.bits.b1, sensor.bits.b0);
+  strcat(XML, buf);
+#endif
   if (SomeOutput) {
     strcat(XML, "<SWITCH>1</SWITCH>\n");
   } else {
     strcat(XML, "<SWITCH>0</SWITCH>\n");
   }
 
-  if (parind.bits.b7) {
-  strcat(XML, "<RL101>1</RL101>\n");
-  } else{
-  strcat(XML, "<RL101>0</RL101>\n");
-  }
+  sprintf(buf, "<SERCAP>0%0d%0d%0d%0d%0d%0d%0d</SERCAP>\n", 
+    sercap.bits.b6, sercap.bits.b5, sercap.bits.b4, sercap.bits.b3,
+    sercap.bits.b2, sercap.bits.b1, sercap.bits.b0);
+  strcat(XML, buf);
 
-  if (serind.bits.b6) {
-  strcat(XML, "<RL103>1</RL103>\n");
-  } else{
-  strcat(XML, "<RL103>0</RL103>\n");
-  }
+  sprintf(buf, "<SERIND>%0d0%0d0%0d%0d%0d%0d%0d</SERIND>\n", 
+    serind.bits.b7, serind.bits.b6, serind.bits.b4, serind.bits.b3,
+    serind.bits.b2, serind.bits.b1, serind.bits.b0);
+  strcat(XML, buf);
 
-  if (serind.bits.b7) {
-  strcat(XML, "<RL104>1</RL104>\n");
-  } else{
-  strcat(XML, "<RL104>0</RL104>\n");
-  }
-
-  if (serind.bits.b0) {
-  strcat(XML, "<RL105>1</RL105>\n");
-  } else{
-  strcat(XML, "<RL105>0</RL105>\n");
-  }
-
-    if (serind.bits.b1) {
-  strcat(XML, "<RL106>1</RL106>\n");
-  } else{
-  strcat(XML, "<RL106>0</RL106>\n");
-  }
-
-    if (serind.bits.b2) {
-  strcat(XML, "<RL107>1</RL107>\n");
-  } else{
-  strcat(XML, "<RL107>0</RL107>\n");
-  }
-
-  if (serind.bits.b3) {
-  strcat(XML, "<RL108>1</RL108>\n");
-  } else{
-  strcat(XML, "<RL108>0</RL108>\n");
-  }
-
-  if (serind.bits.b4) {
-  strcat(XML, "<RL109>1</RL109>\n");
-  } else{
-  strcat(XML, "<RL109>0</RL109>\n");
-  }
-
-  if (serind.bits.b5) {
-  strcat(XML, "<RL110>1</RL110>\n");
-  } else{
-  strcat(XML, "<RL110>0</RL110>\n");
-  }
-
-  if (sercap.bits.b6) {
-  strcat(XML, "<RL111>1</RL111>\n");
-  } else{
-  strcat(XML, "<RL111>0</RL111>\n");
-  }
+  sprintf(buf, "<PARIND>0%0d0%0d%0d%0d%0d%0d</PARIND>\n", 
+    parind.bits.b7, parind.bits.b5, parind.bits.b4, parind.bits.b3,
+    parind.bits.b2, parind.bits.b1, parind.bits.b0);
+  strcat(XML, buf);
 
   strcat(XML, "<EMERGENCY_MODE>");
   if (emergencyShutdownActive) {
@@ -472,6 +433,7 @@ void SendXML() {
     strcat(XML, "0");
   }
   strcat(XML, "</EMERGENCY_MODE>\n");
+
   strcat(XML, "<CORE0_STATUS>");
   if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && uxTaskGetNumberOfTasks() > 0) {
     strcat(XML, "1");
@@ -491,6 +453,7 @@ void SendXML() {
     strcat(XML, "0");
   }
   strcat(XML, "</CORE1_STATUS>\n");
+  
   // Append temperature and humidity data to XML
   strcat(XML, "<DHT_READINGS>\n");
 
