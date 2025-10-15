@@ -56,6 +56,8 @@
 
 const char PAGE_MAIN[] PROGMEM = R"=====(
 
+
+
 <!DOCTYPE html>
 <html lang="en" class="js-focus-visible">
 
@@ -224,9 +226,13 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
     </header>
   
     <main class="container" style="margin-top:70px">
-      <div class="category">System Status</div>
+<table>
+<!--    
+     <div class="category">System Status</div>
       <div style="border-radius: 10px !important;">
-      <table style="width:50%">
+-->
+<table>
+<!--
       <colgroup>
         <col span="1" style="background-color:rgb(230,230,230); width: 20%; color:#000000 ;">
         <col span="1" style="background-color:rgb(200,200,200); width: 15%; color:#000000 ;">
@@ -235,67 +241,83 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       <col span="2"style="background-color:rgb(0,0,0); color:#FFFFFF">
       <col span="2"style="background-color:rgb(0,0,0); color:#FFFFFF">
       <col span="2"style="background-color:rgb(0,0,0); color:#FFFFFF">
+      <col span="2"style="background-color:rgb(0,0,0); color:#FFFFFF">
+      <col span="2"style="background-color:rgb(0,0,0); color:#FFFFFF">
+      -->
       <tr>
         <th colspan="1"><div class="heading">Pin</div></th>
         <th colspan="1"><div class="heading">Bits</div></th>
         <th colspan="1"><div class="heading">Volts</div></th>
+        <th colspan="1"><div class="heading">Core</div></th>
+        <th colspan="1"><div class="heading">Status</div></th>
       </tr>
       <tr>
         <td><div class="bodytext">Forward Power</div></td>
         <td><div class="tabledata" id = "b0"></div></td>
         <td><div class="tabledata" id = "v0"></div></td>
+        <td><div class="bodytext">Core 0</div></td>
+        <td><div id="core0Status" class="tabledata"></div></td>
+        
       </tr>
       <tr>
         <td><div class="bodytext">Refrect Power</div></td>
         <td><div class="tabledata" id = "b1"></div></td>
         <td><div class="tabledata" id = "v1"></div></td>
+        <td><div class="bodytext">Core 1</div></td>
+        <td><div id="core1Status" class="tabledata"></div></td>
       </tr>
+</table>
+<br>
+      <table>
       <tr>
         <td><div class="bodytext">SWR1</div></td>
         <td><div class="tabledata" id = "swr1"></div></td>
-      </tr>
-      <tr>
+
         <td><div class="bodytext">SWR2</div></td>
         <td><div class="tabledata" id = "swr2"></div></td>
-      </tr>
-      <tr>
+
         <td><div class="bodytext">SWR3</div></td>
         <td><div class="tabledata" id = "swr3"></div></td>
       </tr>
       <tr>
         <td><div class="bodytext">Hiz</div></td>
         <td><div class="tabledata" id = "hiz"></div></td>
-      </tr>
-      <tr>
+
         <td><div class="bodytext">Phi</div></td>
         <td><div class="tabledata" id = "phi"></div></td>
-      </tr>
-      <tr>
+
         <td><div class="bodytext">Power</div></td>
         <td><div class="tabledata" id = "pwr3"></div></td>
       </tr>
+      </table>
+<br>
+      <table style="width:50%">
       <tr>
         <td><div class="bodytext">Digital switch</div></td>
         <td><div class="tabledata" id = "switch"></div></td>
+        <td><div class="heading">Temp(&deg;C)</div></td>
+        <td><div class="tabledata" id="dhtTemperature"></div></td>
       </tr>
       <tr>
         <td><div class="bodytext">Emergency Mode</div></td>
         <td><div class="tabledata" id="emergencyMode"></div>
+        <td><div class="heading">Humidity (%)</div></td>
+        <td><div class="tabledata" id="dhtHumidity"></div></td>
         </td>
       </tr>
 </table>
 <br>
       <table>
       <colgroup>
-        <col span="1" ; width: 15%; color:#000000 ;">
         <col span="1" ; width: 10%; color:#000000 ;">
         <col span="1" ; width: 10%; color:#000000 ;">
-        <col span="1" ; width: 15%; color:#000000 ;">
+        <col span="1" ; width: 12%; color:#000000 ;">
         <col span="1" ; width: 10%; color:#000000 ;">
         <col span="1" ; width: 10%; color:#000000 ;">
-        <col span="1" ; width: 15%; color:#000000 ;">
+        <col span="1" ; width: 12%; color:#000000 ;">
         <col span="1" ; width: 10%; color:#000000 ;">
         <col span="1" ; width: 10%; color:#000000 ;">
+        <col span="1" ; width: 12%; color:#000000 ;">
       </colgroup>
       <tr>
         <td><div class="bodytext">RL105</div></td>
@@ -389,72 +411,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
         <td><button type="button" class = "btn" id = "btn101" onclick="ButtonPress101()">Toggle</button></td>
       </tr>
       </table>
-      <div style="float: right; width: 50%; padding: 0px 20px;">
-        <div class="category">Cores Used</div>
-        <table style="width:100%">
-          <colgroup>
-            <col span="1" style="background-color: #343a40; width: 20%; color: #FFFFFF;">
-            <col span="1" style="background-color:rgb(0,0,0); color:#FFFFFF">
-          </colgroup>
-          <tr>
-            <th colspan="1"><div class="heading">Core</div></th>
-            <th colspan="1"><div class="heading">Status</div></th>
-          </tr>
-          <tr>
-            <td><div class="bodytext">Core 0</div></td>
-            <td><div id="core0Status" class="tabledata"></div></td>
-          </tr>
-          <tr>
-            <td><div class="bodytext">Core 1</div></td>
-            <td><div id="core1Status" class="tabledata"></div></td>
-          </tr>
-        </table>
-        <!-- Add the live tasks section -->
-        <div style="margin-top: 20px;">
-          <div class="category">Task Information</div>
-          <div style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
-            <div class="heading">Total Tasks</div>
-            <div class="circle">
-              <div id="taskCount" class="circle-data"></div>
-            </div>
-          </div>
-            <!-- Add this section for HDC1000 live readings -->
-          <div style="margin-top: 20px;">
-            <div class="category">Live Readings</div>
-            <table style="width:50%">
-              <tr>
-                <td><div class="heading">Temp(&deg;C)</div></td>
-                <td><div class="tabledata" id="dhtTemperature"></div></td>
-              </tr>
-              <tr>
-                <td><div class="heading">Humidity (%)</div></td>
-                <td><div class="tabledata" id="dhtHumidity"></div></td>
-              </tr>
-            </table>
-          </div>
-        </div>
 
-        <style>
-          .circle {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background-color: #343a40;
-            color: #FFFFFF;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            margin-top: 10px;
-          }
-
-          .circle-data {
-            font-size: 40px;
-            font-weight: bold;
-          }
-        </style>
-      </div>
-    </div>
     <br>
     <div class="category">Relay Controls</div>
     <br>
@@ -636,8 +593,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       
       if (message > 2048){
       color = "#aa0000";
-      }
-      else {
+      } else {
         color = "#0000aa";
       }
       
@@ -662,8 +618,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       message = xmldoc[0].firstChild.nodeValue;
       if (message > 2048){
       color = "#aa0000";
-      }
-      else {
+      } else {
         color = "#0000aa";
       }
       document.getElementById("b1").innerHTML=message;
@@ -684,8 +639,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       document.getElementById("switch").style.backgroundColor="rgb(200,200,200)";
       if (message == 0){
         document.getElementById("btn0").innerHTML="Turn ON";
-      }
-      else{
+      } else{
         document.getElementById("btn0").innerHTML="Turn OFF";
       }
 
@@ -695,8 +649,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       if (message == 0){
         document.getElementById("swr1").innerHTML="Over 1.5";
         document.getElementById("switch").style.color="#0000AA"; 
-      }
-      else{
+      } else{
         document.getElementById("swr1").innerHTML="Less 1.5";
         document.getElementById("switch").style.color="#00AA00";
       }
@@ -706,8 +659,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       if (message == 0){
         document.getElementById("swr2").innerHTML="Over 2";
         document.getElementById("switch").style.color="#0000AA"; 
-      }
-      else{
+      } else{
         document.getElementById("swr2").innerHTML="Less 2";
         document.getElementById("switch").style.color="#00AA00";
       }
@@ -717,8 +669,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       if (message == 0){
         document.getElementById("swr3").innerHTML="Over 3";
         document.getElementById("switch").style.color="#0000AA"; 
-      }
-      else{
+      } else{
         document.getElementById("swr3").innerHTML="Less 3";
         document.getElementById("switch").style.color="#00AA00";
       }
@@ -729,8 +680,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       if (message == 0){
         document.getElementById("hiz").innerHTML="Over 50";
         document.getElementById("switch").style.color="#0000AA"; 
-      }
-      else{
+      } else{
         document.getElementById("hiz").innerHTML="Less 50";
         document.getElementById("switch").style.color="#00AA00";
       }
@@ -741,8 +691,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       if (message == 0){
         document.getElementById("phi").innerHTML="Inductive";
         document.getElementById("switch").style.color="#0000AA"; 
-      }
-      else{
+      } else{
         document.getElementById("phi").innerHTML="Capacitive";
         document.getElementById("switch").style.color="#00AA00";
       }
@@ -753,8 +702,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       if (message == 0){
         document.getElementById("pwr3").innerHTML="Over 3W";
         document.getElementById("switch").style.color="#0000AA"; 
-      }
-      else{
+      } else{
         document.getElementById("pwr3").innerHTML="Less 3W";
         document.getElementById("switch").style.color="#00AA00";
       }
@@ -767,8 +715,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
         document.getElementById("switch").innerHTML="Switch is OFF";
         document.getElementById("btn1").innerHTML="Turn ON";
         document.getElementById("switch").style.color="#0000AA"; 
-      }
-      else {
+      } else {
         document.getElementById("switch").innerHTML="Switch is ON";
         document.getElementById("btn1").innerHTML="Turn OFF";
         document.getElementById("switch").style.color="#00AA00";
@@ -779,12 +726,11 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       document.getElementById("rl101").style.backgroundColor="rgb(200,200,200)";
       if (message == 0){
         document.getElementById("rl101").innerHTML="Switch is OFF";
-        document.getElementById("btn101").innerHTML="Turn ON";
+        document.getElementById("btn101").innerHTML="O N";
         document.getElementById("rl101").style.color="#0000AA"; 
-      }
-      else {
+      } else {
         document.getElementById("rl101").innerHTML="Switch is ON";
-        document.getElementById("btn101").innerHTML="Turn OFF";
+        document.getElementById("btn101").innerHTML="OFF";
         document.getElementById("rl101").style.color="#00AA00";
       }
 
@@ -795,8 +741,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
         document.getElementById("rl103").innerHTML="Switch is OFF";
         document.getElementById("btn103").innerHTML="Turn ON";
         document.getElementById("rl103").style.color="#0000AA"; 
-      }
-      else {
+      } else {
         document.getElementById("rl103").innerHTML="Switch is ON";
         document.getElementById("btn103").innerHTML="Turn OFF";
         document.getElementById("rl103").style.color="#00AA00";
@@ -809,8 +754,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
         document.getElementById("rl104").innerHTML="Switch is OFF";
         document.getElementById("btn104").innerHTML="Turn ON";
         document.getElementById("rl104").style.color="#0000AA"; 
-      }
-      else {
+      } else {
         document.getElementById("rl104").innerHTML="Switch is ON";
         document.getElementById("btn104").innerHTML="Turn OFF";
         document.getElementById("rl104").style.color="#00AA00";
@@ -823,8 +767,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
         document.getElementById("rl105").innerHTML="Switch is OFF";
         document.getElementById("btn105").innerHTML="Turn ON";
         document.getElementById("rl105").style.color="#0000AA"; 
-      }
-      else {
+      } else {
         document.getElementById("rl105").innerHTML="Switch is ON";
         document.getElementById("btn105").innerHTML="Turn OFF";
         document.getElementById("rl105").style.color="#00AA00";
@@ -837,8 +780,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
         document.getElementById("rl106").innerHTML="Switch is OFF";
         document.getElementById("btn106").innerHTML="Turn ON";
         document.getElementById("rl106").style.color="#0000AA"; 
-      }
-      else {
+      } else {
         document.getElementById("rl106").innerHTML="Switch is ON";
         document.getElementById("btn106").innerHTML="Turn OFF";
         document.getElementById("rl106").style.color="#00AA00";
@@ -851,8 +793,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
         document.getElementById("rl107").innerHTML="Switch is OFF";
         document.getElementById("btn107").innerHTML="Turn ON";
         document.getElementById("rl107").style.color="#0000AA"; 
-      }
-      else {
+      } else {
         document.getElementById("rl107").innerHTML="Switch is ON";
         document.getElementById("btn107").innerHTML="Turn OFF";
         document.getElementById("rl107").style.color="#00AA00";
@@ -865,8 +806,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
         document.getElementById("rl108").innerHTML="Switch is OFF";
         document.getElementById("btn108").innerHTML="Turn ON";
         document.getElementById("rl108").style.color="#0000AA"; 
-      }
-      else {
+      } else {
         document.getElementById("rl108").innerHTML="Switch is ON";
         document.getElementById("btn108").innerHTML="Turn OFF";
         document.getElementById("rl108").style.color="#00AA00";
@@ -879,8 +819,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
         document.getElementById("rl109").innerHTML="Switch is OFF";
         document.getElementById("btn109").innerHTML="Turn ON";
         document.getElementById("rl109").style.color="#0000AA"; 
-      }
-      else {
+      } else {
         document.getElementById("rl109").innerHTML="Switch is ON";
         document.getElementById("btn109").innerHTML="Turn OFF";
         document.getElementById("rl109").style.color="#00AA00";
@@ -893,8 +832,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
         document.getElementById("rl110").innerHTML="Switch is OFF";
         document.getElementById("btn110").innerHTML="Turn ON";
         document.getElementById("rl110").style.color="#0000AA"; 
-      }
-      else {
+      } else {
         document.getElementById("rl110").innerHTML="Switch is ON";
         document.getElementById("btn110").innerHTML="Turn OFF";
         document.getElementById("rl110").style.color="#00AA00";
@@ -907,8 +845,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
         document.getElementById("rl111").innerHTML="Switch is OFF";
         document.getElementById("btn111").innerHTML="Turn ON";
         document.getElementById("rl111").style.color="#0000AA"; 
-      }
-      else {
+      } else {
         document.getElementById("rl111").innerHTML="Switch is ON";
         document.getElementById("btn111").innerHTML="Turn OFF";
         document.getElementById("rl111").style.color="#00AA00";
@@ -962,13 +899,8 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
         // a longer timeout
         setTimeout("process()",100);
     }
-  
-  
   </script>
-
 </html>
-
-
 
 
 )=====";
