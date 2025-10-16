@@ -601,6 +601,36 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       xhttp.send(); 
     }    
 
+    function ButtonPress112() {
+      var xhttp = new XMLHttpRequest(); 
+      xhttp.open("PUT", "BUTTON_112", false);
+      xhttp.send(); 
+    }   
+    function ButtonPress113() {
+      var xhttp = new XMLHttpRequest(); 
+      xhttp.open("PUT", "BUTTON_113", false);
+      xhttp.send(); 
+    }  
+    function ButtonPress114() {
+      var xhttp = new XMLHttpRequest(); 
+      xhttp.open("PUT", "BUTTON_114", false);
+      xhttp.send(); 
+    }  
+    function ButtonPress115() {
+      var xhttp = new XMLHttpRequest(); 
+      xhttp.open("PUT", "BUTTON_115", false);
+      xhttp.send(); 
+    }  
+    function ButtonPress116() {
+      var xhttp = new XMLHttpRequest(); 
+      xhttp.open("PUT", "BUTTON_116", false);
+      xhttp.send(); 
+    }  
+    function ButtonPress117() {
+      var xhttp = new XMLHttpRequest(); 
+      xhttp.open("PUT", "BUTTON_117", false);
+      xhttp.send(); 
+    }  
     function ButtonPress101() {
       var xhttp = new XMLHttpRequest(); 
       xhttp.open("PUT", "BUTTON_101", false);
@@ -856,7 +886,48 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       xmldoc = xmlResponse.getElementsByTagName("PARIND");
       message = xmldoc[0].firstChild.nodeValue;
       document.getElementById("parind").innerHTML=message;
-
+      if (message[7] == 1){
+        document.getElementById("btn112").innerHTML="OFF";
+        document.getElementById("btn112").style.backgroundColor="rgb(200,000,000)";
+      } else {
+        document.getElementById("btn112").innerHTML="ON";
+        document.getElementById("btn112").style.backgroundColor="rgb(000,200,000)";
+      }
+      if (message[6] == 1){
+        document.getElementById("btn113").innerHTML="OFF";
+        document.getElementById("btn113").style.backgroundColor="rgb(200,000,000)";
+      } else {
+        document.getElementById("btn113").innerHTML="ON";
+        document.getElementById("btn113").style.backgroundColor="rgb(000,200,000)";
+      }
+      if (message[5] == 1){
+        document.getElementById("btn114").innerHTML="OFF";
+        document.getElementById("btn114").style.backgroundColor="rgb(200,000,000)";
+      } else {
+        document.getElementById("btn114").innerHTML="ON";
+        document.getElementById("btn114").style.backgroundColor="rgb(000,200,000)";
+      }
+      if (message[4] == 1){
+        document.getElementById("btn115").innerHTML="OFF";
+        document.getElementById("btn115").style.backgroundColor="rgb(200,000,000)";
+      } else {
+        document.getElementById("btn115").innerHTML="ON";
+        document.getElementById("btn115").style.backgroundColor="rgb(000,200,000)";
+      }
+      if (message[3] == 1){
+        document.getElementById("btn116").innerHTML="OFF";
+        document.getElementById("btn116").style.backgroundColor="rgb(200,000,000)";
+      } else {
+        document.getElementById("btn116").innerHTML="ON";
+        document.getElementById("btn116").style.backgroundColor="rgb(000,200,000)";
+      }
+      if (message[2] == 1){
+        document.getElementById("btn117").innerHTML="OFF";
+        document.getElementById("btn117").style.backgroundColor="rgb(200,000,000)";
+      } else {
+        document.getElementById("btn117").innerHTML="ON";
+        document.getElementById("btn117").style.backgroundColor="rgb(000,200,000)";
+      }
       if (message[0] == 1){
         document.getElementById("btn101").innerHTML="OFF";
         document.getElementById("btn101").style.backgroundColor="rgb(200,000,000)";
