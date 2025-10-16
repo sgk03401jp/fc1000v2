@@ -493,24 +493,6 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       xhttp.send(); 
     }
 
-    function ButtonPress101() {
-      var xhttp = new XMLHttpRequest(); 
-      xhttp.open("PUT", "BUTTON_101", false);
-      xhttp.send(); 
-    }    
-
-    function ButtonPress103() {
-      var xhttp = new XMLHttpRequest(); 
-      xhttp.open("PUT", "BUTTON_103", false);
-      xhttp.send(); 
-    }
-
-    function ButtonPress104() {
-      var xhttp = new XMLHttpRequest(); 
-      xhttp.open("PUT", "BUTTON_104", false);
-      xhttp.send(); 
-    }    
-
     function ButtonPress105() {
       var xhttp = new XMLHttpRequest(); 
       xhttp.open("PUT", "BUTTON_105", false);
@@ -645,42 +627,44 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       xmldoc = xmlResponse.getElementsByTagName("SENSOR");
       message = xmldoc[0].firstChild.nodeValue;
       document.getElementById("sensor").innerHTML=message;
-      if (message[0] == 1){
+      if (message[0] == 1) {
         document.getElementById("swr1").innerHTML="Over 1.5";
         document.getElementById("switch").style.color="#0000AA"; 
       } else {
         document.getElementById("swr1").innerHTML="Less 1.5";
         document.getElementById("switch").style.color="#00AA00";
       }
-      if (message[1] == 1){
+      if (message[1] == 1) {
         document.getElementById("swr2").innerHTML="Over 2";
         document.getElementById("switch").style.color="#0000AA"; 
       } else {
         document.getElementById("swr2").innerHTML="Less 2";
         document.getElementById("switch").style.color="#00AA00";
       }
-      if (message[2] == 1){
+      if (message[2] == 1) {
         document.getElementById("swr3").innerHTML="Over 3";
         document.getElementById("switch").style.color="#0000AA"; 
       } else {
         document.getElementById("swr3").innerHTML="Less 3";
         document.getElementById("switch").style.color="#00AA00";
       }
-      if (message[3] == 1){
+      document.getElementById("hiz").style.backgroundColor="rgb(000,000,200)";
+      if (message[3] == 1) {
         document.getElementById("hiz").innerHTML="Over 50";
         document.getElementById("switch").style.color="#0000AA"; 
       } else {
         document.getElementById("hiz").innerHTML="Less 50";
         document.getElementById("switch").style.color="#00AA00";
       }
-      if (message[4] == 1){
+      document.getElementById("phi").style.backgroundColor="rgb(000,000,200)";
+      if (message[4] == 1) {
         document.getElementById("phi").innerHTML="Inductive";
         document.getElementById("switch").style.color="#0000AA"; 
       } else {
         document.getElementById("phi").innerHTML="Capacitive";
         document.getElementById("switch").style.color="#00AA00";
       }
-      if (message[5] == 1){
+      if (message[5] == 1) {
         document.getElementById("pwr3").innerHTML="Over 3W";
         document.getElementById("switch").style.color="#0000AA"; 
       } else {
@@ -765,25 +749,54 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       xmldoc = xmlResponse.getElementsByTagName("SERIND");
       message = xmldoc[0].firstChild.nodeValue;
       document.getElementById("serind").innerHTML=message;
-      document.getElementById("btn103").style.backgroundColor="rgb(200,200,200)";
-      if (message[1] == 1){
-        document.getElementById("rl103").innerHTML="Switch is OFF";
-        document.getElementById("btn103").innerHTML="Turn ON";
-        document.getElementById("rl103").style.color="#0000AA"; 
-      } else {
-        document.getElementById("rl103").innerHTML="Switch is ON";
-        document.getElementById("btn103").innerHTML="Turn OFF";
-        document.getElementById("rl103").style.color="#00AA00";
-      }
-      document.getElementById("btn104").style.backgroundColor="rgb(200,200,200)";
       if (message[7] == 1){
-        document.getElementById("rl104").innerHTML="Switch is OFF";
-        document.getElementById("btn104").innerHTML="Turn ON";
-        document.getElementById("rl104").style.color="#0000AA"; 
+        document.getElementById("btn118").innerHTML="ON";
+        document.getElementById("btn118").style.backgroundColor="rgb(200,000,000)";
       } else {
-        document.getElementById("rl104").innerHTML="Switch is ON";
-        document.getElementById("btn104").innerHTML="Turn OFF";
-        document.getElementById("rl104").style.color="#00AA00";
+        document.getElementById("btn118").innerHTML="OFF";
+        document.getElementById("btn118").style.backgroundColor="rgb(000,200,000)";
+      }
+      if (message[6] == 1){
+        document.getElementById("btn119").innerHTML="ON";
+        document.getElementById("btn119").style.backgroundColor="rgb(200,000,000)";
+      } else {
+        document.getElementById("btn119").innerHTML="OFF";
+        document.getElementById("btn119").style.backgroundColor="rgb(000,200,000)";
+      }
+      if (message[5] == 1){
+        document.getElementById("btn120").innerHTML="ON";
+        document.getElementById("btn120").style.backgroundColor="rgb(200,000,000)";
+      } else {
+        document.getElementById("btn120").innerHTML="OFF";
+        document.getElementById("btn120").style.backgroundColor="rgb(000,200,000)";
+      }
+      if (message[4] == 1){
+        document.getElementById("btn121").innerHTML="ON";
+        document.getElementById("btn121").style.backgroundColor="rgb(200,000,000)";
+      } else {
+        document.getElementById("btn121").innerHTML="OFF";
+        document.getElementById("btn121").style.backgroundColor="rgb(000,200,000)";
+      }
+      if (message[3] == 1){
+        document.getElementById("btn122").innerHTML="ON";
+        document.getElementById("btn122").style.backgroundColor="rgb(200,000,000)";
+      } else {
+        document.getElementById("btn122").innerHTML="OFF";
+        document.getElementById("btn122").style.backgroundColor="rgb(000,200,000)";
+      }
+      if (message[1] == 1){
+        document.getElementById("btn103").innerHTML="ON";
+        document.getElementById("btn103").style.backgroundColor="rgb(200,000,000)";
+      } else {
+        document.getElementById("btn103").innerHTML="OFF";
+        document.getElementById("btn103").style.backgroundColor="rgb(000,200,000)";
+      }
+      if (message[0] == 1){
+        document.getElementById("btn104").innerHTML="ON";
+        document.getElementById("btn104").style.backgroundColor="rgb(200,000,000)";
+      } else {
+        document.getElementById("btn104").innerHTML="OFF";
+        document.getElementById("btn104").style.backgroundColor="rgb(000,200,000)";
       }
 
       xmldoc = xmlResponse.getElementsByTagName("PARIND");
@@ -800,9 +813,40 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
         document.getElementById("rl101").style.color="#00AA00";
       }
 
+      xmldoc = xmlResponse.getElementsByTagName("TEST");
+      message = xmldoc[0].firstChild.nodeValue;
+      document.getElementById("test").innerHTML=message;
+      if (message[7] == 1){
+        document.getElementById("btnsensortest").innerHTML="OFF";
+        document.getElementById("btnsensortest").style.backgroundColor="rgb(200,000,000)";
+      } else {
+        document.getElementById("btnsensortest").innerHTML="ON";
+        document.getElementById("btnsensortest").style.backgroundColor="rgb(000,200,000)";
+      }
+      if (message[6] == 1){
+        document.getElementById("btnsercaptest").innerHTML="OFF";
+        document.getElementById("btnsercaptest").style.backgroundColor="rgb(200,000,000)";
+      } else {
+        document.getElementById("btnsercaptest").innerHTML="ON";
+        document.getElementById("btnsercaptest").style.backgroundColor="rgb(000,200,000)";
+      }
+      if (message[5] == 1){
+        document.getElementById("btnserindtest").innerHTML="OFF";
+        document.getElementById("btnserindtest").style.backgroundColor="rgb(200,000,000)";
+      } else {
+        document.getElementById("btnserindtest").innerHTML="ON";
+        document.getElementById("btnserindtest").style.backgroundColor="rgb(000,200,000)";
+      }
+      if (message[4] == 1){
+        document.getElementById("btnparindtest").innerHTML="OFF";
+        document.getElementById("btnparindtest").style.backgroundColor="rgb(200,000,000)";
+      } else {
+        document.getElementById("btnparindtest").innerHTML="ON";
+        document.getElementById("btnparindtest").style.backgroundColor="rgb(000,200,000)";
+      }
+
       xmldoc = xmlResponse.getElementsByTagName("SWITCH");
       message = xmldoc[0].firstChild.nodeValue;
-      document.getElementById("switch").style.backgroundColor="rgb(200,200,200)";
       // update the text in the table
       if (message == 0){
         document.getElementById("switch").innerHTML="Switch is OFF";
@@ -820,10 +864,10 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       document.getElementById("emergencyMode").style.backgroundColor="rgb(200,200,200)";
       // var emergencyModeCell = document.getElementById("emergencyMode");
       if (message == 0) {
-        document.getElementById("emergencyMode").innerHTML="OFF";
+        document.getElementById("emergencyMode").innerHTML="ON";
         document.getElementById("emergencyMode").style.color="#00AA00";  // Green color for OFF
       } else {
-        document.getElementById("emergencyMode").innerHTML="ON";
+        document.getElementById("emergencyMode").innerHTML="OFF";
         document.getElementById("emergencyMode").style.color = "#AA0000";  // Red color for ON
       }
       // Fetch and update Core status
@@ -834,11 +878,11 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       xmldoc = xmlResponse.getElementsByTagName("CORE1_STATUS");
       message = xmldoc[0].firstChild.nodeValue;
       document.getElementById("core1Status").innerHTML = message === "1" ? "In Use" : "Not In Use";
-/*
+
       xmldoc = xmlResponse.getElementsByTagName("TASK_COUNT");
       var taskCount = xmldoc[0].firstChild.nodeValue;
       document.getElementById("taskCount").innerHTML = taskCount;
-*/
+
       // Fetch and update DHT11 live readings
       xmldoc = xmlResponse.getElementsByTagName("DHT_READINGS");
       var dhtTemperature = xmldoc[0].getElementsByTagName("TEMP")[0].firstChild.nodeValue;
@@ -847,7 +891,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       document.getElementById("dhtTemperature").innerHTML = dhtTemperature;
       document.getElementById("dhtHumidity").innerHTML = dhtHumidity;
      }
-  
+
     // general processing code for the web page to ask for an XML steam
     // this is actually why you need to keep sending data to the page to 
     // force this call with stuff like this

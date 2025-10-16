@@ -38,6 +38,7 @@ bm sercap;
 bm serind;
 bm parind;
 bm sensor;
+bm rytest;
 
 TaskHandle_t mainTask;
 TaskHandle_t serverTask;
@@ -62,6 +63,10 @@ void ProcessButton_108();
 void ProcessButton_109();
 void ProcessButton_110();
 void ProcessButton_111();
+void SensorTest();
+void SerCapTest();
+void SerIndTest();
+void ParIndTest();
 
 int BitsA0 = 0, BitsA1 = 0;
 float VoltsA0 = 0, VoltsA1 = 0;
@@ -124,9 +129,6 @@ void setup(void) {
   server.on("/UPDATE_SLIDER", UpdateSlider);
   server.on("/BUTTON_0", ProcessButton_0);
   server.on("/BUTTON_1", ProcessButton_1);
-  server.on("/BUTTON_101", ProcessButton_101); 
-  server.on("/BUTTON_103", ProcessButton_103);  
-  server.on("/BUTTON_104", ProcessButton_104);  
 
   server.on("/BUTTON_105", ProcessButton_105);  
   server.on("/BUTTON_106", ProcessButton_106);  
@@ -136,21 +138,26 @@ void setup(void) {
   server.on("/BUTTON_110", ProcessButton_110);  
   server.on("/BUTTON_111", ProcessButton_111);  
 
-  server.on("/BUTTON_118", ProcessButton_111);  
-  server.on("/BUTTON_119", ProcessButton_111);  
-  server.on("/BUTTON_120", ProcessButton_111);  
-  server.on("/BUTTON_121", ProcessButton_111);  
-  server.on("/BUTTON_122", ProcessButton_111);  
-  server.on("/BUTTON_103", ProcessButton_111);  
-  server.on("/BUTTON_104", ProcessButton_111);  
+  server.on("/BUTTON_118", ProcessButton_118);  
+  server.on("/BUTTON_119", ProcessButton_119);  
+  server.on("/BUTTON_120", ProcessButton_120);  
+  server.on("/BUTTON_121", ProcessButton_121);  
+  server.on("/BUTTON_122", ProcessButton_122);  
+  server.on("/BUTTON_103", ProcessButton_103);  
+  server.on("/BUTTON_104", ProcessButton_104);  
 
-  server.on("/BUTTON_112", ProcessButton_111);  
-  server.on("/BUTTON_113", ProcessButton_111);  
-  server.on("/BUTTON_114", ProcessButton_111);  
-  server.on("/BUTTON_115", ProcessButton_111);  
-  server.on("/BUTTON_116", ProcessButton_111);  
-  server.on("/BUTTON_117", ProcessButton_111);  
-  server.on("/BUTTON_101", ProcessButton_111);  
+  server.on("/BUTTON_112", ProcessButton_112);  
+  server.on("/BUTTON_113", ProcessButton_113);  
+  server.on("/BUTTON_114", ProcessButton_114);  
+  server.on("/BUTTON_115", ProcessButton_115);  
+  server.on("/BUTTON_116", ProcessButton_116);  
+  server.on("/BUTTON_117", ProcessButton_117);  
+  server.on("/BUTTON_101", ProcessButton_101);  
+
+  server.on("/BUTTON_SENSOR_TEST", SensorTest);  
+  server.on("/BUTTON_SERCAP_TEST", SerCapTest);  
+  server.on("/BUTTON_SERIND_TEST", SerIndTest);  
+  server.on("/BUTTON_PARIND_TEST", ParIndTest);  
 
   server.begin();
   Serial.println("HTTP server started");
@@ -159,7 +166,7 @@ void setup(void) {
   // Create FreeRTOS tasks
   xTaskCreateUniversal(IR_Sensor_Function,  "Task1",      4096, NULL, 2, &Task1Handle, 0);
   xTaskCreateUniversal(HDC_Sensor_Function, "Task2",      4096, NULL, 2, &Task2Handle, 0);
-  xTaskCreateUniversal(Emergency_Function,  "Task3",      8192, NULL, 3, &Task3Handle, 0);
+  xTaskCreateUniversal(Emergency_Function,  "Task3",      4096, NULL, 3, &Task3Handle, 0);
   // Create a server task pinned to core 1
   xTaskCreateUniversal(ServerTask,          "serverTask", 8192, NULL, 3, &serverTask, 1);
 }
@@ -341,8 +348,33 @@ void ProcessButton_117() {
 }
 void ProcessButton_101() {
   parind.bits.b7 = !parind.bits.b7;
-  Serial.print("Button 112 ");
+  Serial.print("Button 101 ");
   Serial.println(sercap.byte);
+  server.send(200, "text/plain", "");
+}
+
+void SensorTest() {
+  rytest.bits.b0 = !rytest.bits.b0;
+  Serial.print("Button Sensor Test ");
+  Serial.println(rytest.byte);
+  server.send(200, "text/plain", "");
+}
+void SerCapTest() {
+  rytest.bits.b1 = !rytest.bits.b1;
+  Serial.print("Button SerCap Test ");
+  Serial.println(rytest.byte);
+  server.send(200, "text/plain", "");
+}
+void SerIndTest() {
+  rytest.bits.b2 = !rytest.bits.b2;
+  Serial.print("Button SerInd Test ");
+  Serial.println(rytest.byte);
+  server.send(200, "text/plain", "");
+}
+void ParIndTest() {
+  rytest.bits.b3 = !rytest.bits.b3;
+  Serial.print("Button ParInd Test ");
+  Serial.println(rytest.byte);
   server.send(200, "text/plain", "");
 }
 
@@ -367,56 +399,19 @@ void SendXML() {
   } else {
     strcat(XML, "<LED>0</LED>\n");
   }
-#if 0
-  if (sensor.bits.b0) {
-  strcat(XML, "<SWR1>1</SWR1>\n");
-  } else {
-  strcat(XML, "<SWR1>0</SWR1>\n");
-  }
-  if (sensor.bits.b1) {
-  strcat(XML, "<SWR2>1</SWR2>\n");
-  } else {
-  strcat(XML, "<SWR2>0</SWR2>\n");
-  }
-  if (sensor.bits.b2) {
-  strcat(XML, "<SWR3>1</SWR3>\n");
-  } else {
-  strcat(XML, "<SWR3>0</SWR3>\n");
-  }
-  if (sensor.bits.b3) {
-  strcat(XML, "<HIZ>1</HIZ>\n");
-  } else {
-  strcat(XML, "<HIZ>0</HIZ>\n");
-  }
-  if (sensor.bits.b4) {
-  strcat(XML, "<PHI>1</PHI>\n");
-  } else {
-  strcat(XML, "<PHI>0</PHI>\n");
-  }
-  if (sensor.bits.b5) {
-  strcat(XML, "<PWR3>1</PWR3>\n");
-  } else {
-  strcat(XML, "<PWR3>0</PWR3>\n");
-  }
-#else
+
 sensor.byte++;
   sprintf(buf, "<SENSOR>000%0d%0d%0d%0d%0d</SENSOR>\n", 
     sensor.bits.b5, sensor.bits.b4, sensor.bits.b3, sensor.bits.b2,
     sensor.bits.b1, sensor.bits.b0);
   strcat(XML, buf);
-#endif
-  if (SomeOutput) {
-    strcat(XML, "<SWITCH>1</SWITCH>\n");
-  } else {
-    strcat(XML, "<SWITCH>0</SWITCH>\n");
-  }
 
   sprintf(buf, "<SERCAP>0%0d%0d%0d%0d%0d%0d%0d</SERCAP>\n", 
     sercap.bits.b6, sercap.bits.b5, sercap.bits.b4, sercap.bits.b3,
     sercap.bits.b2, sercap.bits.b1, sercap.bits.b0);
   strcat(XML, buf);
 
-  sprintf(buf, "<SERIND>%0d0%0d0%0d%0d%0d%0d%0d</SERIND>\n", 
+  sprintf(buf, "<SERIND>%0d%0d0%0d%0d%0d%0d%0d</SERIND>\n", 
     serind.bits.b7, serind.bits.b6, serind.bits.b4, serind.bits.b3,
     serind.bits.b2, serind.bits.b1, serind.bits.b0);
   strcat(XML, buf);
@@ -425,6 +420,16 @@ sensor.byte++;
     parind.bits.b7, parind.bits.b5, parind.bits.b4, parind.bits.b3,
     parind.bits.b2, parind.bits.b1, parind.bits.b0);
   strcat(XML, buf);
+
+  sprintf(buf, "<TEST>0000%0d%0d%0d%0d</TEST>\n", 
+    rytest.bits.b3, rytest.bits.b2, rytest.bits.b1, rytest.bits.b0);
+  strcat(XML, buf);
+
+  if (SomeOutput) {
+    strcat(XML, "<SWITCH>1</SWITCH>\n");
+  } else {
+    strcat(XML, "<SWITCH>0</SWITCH>\n");
+  }
 
   strcat(XML, "<EMERGENCY_MODE>");
   if (emergencyShutdownActive) {
@@ -454,6 +459,10 @@ sensor.byte++;
   }
   strcat(XML, "</CORE1_STATUS>\n");
   
+  strcat(XML, "<TASK_COUNT>");
+  strcat(XML, String(taskCount).c_str());
+  strcat(XML, "</TASK_COUNT>\n");
+  
   // Append temperature and humidity data to XML
   strcat(XML, "<DHT_READINGS>\n");
 
@@ -470,9 +479,6 @@ sensor.byte++;
   strcat(XML, "</HUMIDITY>\n");
 
   strcat(XML, "</DHT_READINGS>\n");
-  strcat(XML, "<TASK_COUNT>");
-  strcat(XML, String(taskCount).c_str());
-  strcat(XML, "</TASK_COUNT>\n");
 
   strcat(XML, "</Data>\n");
   Serial.println(XML);
