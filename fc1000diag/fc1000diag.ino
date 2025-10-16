@@ -416,7 +416,7 @@ sensor.byte++;
     serind.bits.b2, serind.bits.b1, serind.bits.b0);
   strcat(XML, buf);
 
-  sprintf(buf, "<PARIND>0%0d0%0d%0d%0d%0d%0d</PARIND>\n", 
+  sprintf(buf, "<PARIND>%0d0%0d%0d%0d%0d%0d%0d</PARIND>\n", 
     parind.bits.b7, parind.bits.b5, parind.bits.b4, parind.bits.b3,
     parind.bits.b2, parind.bits.b1, parind.bits.b0);
   strcat(XML, buf);
@@ -462,7 +462,7 @@ sensor.byte++;
   strcat(XML, "<TASK_COUNT>");
   strcat(XML, String(taskCount).c_str());
   strcat(XML, "</TASK_COUNT>\n");
-  
+
   // Append temperature and humidity data to XML
   strcat(XML, "<DHT_READINGS>\n");
 
