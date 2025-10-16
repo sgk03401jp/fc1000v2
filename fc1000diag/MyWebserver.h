@@ -319,94 +319,130 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       </colgroup>
       <tr>
         <td><div class="bodytext">RL105</div></td>
-        <td><div class="tabledata" id = "rl105"></div></td>
         <td><button type="button" class = "btn" id = "btn105" onclick="ButtonPress105()">Toggle</button></td>
         
         <td><div class="bodytext">RL118</div></td>
-        <td><div class="tabledata" id = "rl118"></div></td>
         <td><button type="button" class = "btn" id = "btn118" onclick="ButtonPress118()">Toggle</button></td>
         
         <td><div class="bodytext">RL112</div></td>
-        <td><div class="tabledata" id = "rl112"></div></td>
         <td><button type="button" class = "btn" id = "btn112" onclick="ButtonPress112()">Toggle</button></td>
+      
+        <td><div class="bodytext">SENSOR <span id="sensor"></span></div></td>
+        <td><button type="button" class = "btn" id = "btnsensortest" onclick="ButtonSensorTest()">OFF</button></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
       </tr>
+
       <tr>
         <td><div class="bodytext">RL106</div></td>
-        <td><div class="tabledata" id = "rl106"></div></td>
         <td><button type="button" class = "btn" id = "btn106" onclick="ButtonPress106()">Toggle</button></td>
         
         <td><div class="bodytext">RL119</div></td>
-        <td><div class="tabledata" id = "rl119"></div></td>
         <td><button type="button" class = "btn" id = "btn119" onclick="ButtonPress119()">Toggle</button></td>
         
         <td><div class="bodytext">RL113</div></td>
-        <td><div class="tabledata" id = "rl113"></div></td>
         <td><button type="button" class = "btn" id = "btn113" onclick="ButtonPress113()">Toggle</button></td>
+      
+        <td><div class="bodytext">SERCAP <span id="sercap"></span></div></td>
+        <td><button type="button" class = "btn" id = "btnsercaptest" onclick="ButtonSerCapTest()">OFF</button></td>
+
+        <td></td>
+        <td></td>
+
+        <td></td>
+        <td></td>
       </tr>
       <tr>
         <td><div class="bodytext">RL107</div></td>
-        <td><div class="tabledata" id = "rl107"></div></td>
         <td><button type="button" class = "btn" id = "btn107" onclick="ButtonPress107()">Toggle</button></td>
         
         <td><div class="bodytext">RL120</div></td>
-        <td><div class="tabledata" id = "rl120"></div></td>
         <td><button type="button" class = "btn" id = "btn120" onclick="ButtonPress120()">Toggle</button></td>
         
         <td><div class="bodytext">RL114</div></td>
-        <td><div class="tabledata" id = "rl114"></div></td>
         <td><button type="button" class = "btn" id = "btn114" onclick="ButtonPress114()">Toggle</button></td>
+      
+        <td><div class="bodytext">SERIND <span id="serind"></span></div></td>
+        <td><button type="button" class = "btn" id = "serind" onclick="ButtonSerIndTest()">OFF</button></td>
+
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
       </tr>
       <tr>
         <td><div class="bodytext">RL108</div></td>
-        <td><div class="tabledata" id = "rl108"></div></td>
         <td><button type="button" class = "btn" id = "btn108" onclick="ButtonPress108()">Toggle</button></td>
         
         <td><div class="bodytext">RL121</div></td>
-        <td><div class="tabledata" id = "rl121"></div></td>
         <td><button type="button" class = "btn" id = "btn121" onclick="ButtonPress121()">Toggle</button></td>
         
         <td><div class="bodytext">RL115</div></td>
-        <td><div class="tabledata" id = "rl115"></div></td>
         <td><button type="button" class = "btn" id = "btn115" onclick="ButtonPress115()">Toggle</button></td>
+      
+        <td><div class="bodytext">PARIND <span id="parind"></span></div></td>
+        <td><button type="button" class = "btn" id = "parind" onclick="ButtonParIndTest()">OFF</button></td>
+
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
       </tr>
       <tr>
         <td><div class="bodytext">RL109</div></td>
-        <td><div class="tabledata" id = "rl109"></div></td>
         <td><button type="button" class = "btn" id = "btn109" onclick="ButtonPress109()">Toggle</button></td>
         
         <td><div class="bodytext">RL122</div></td>
-        <td><div class="tabledata" id = "rl122"></div></td>
         <td><button type="button" class = "btn" id = "btn122" onclick="ButtonPress122()">Toggle</button></td>
         
         <td><div class="bodytext">RL116</div></td>
-        <td><div class="tabledata" id = "rl116"></div></td>
         <td><button type="button" class = "btn" id = "btn116" onclick="ButtonPress116()">Toggle</button></td>
+      
+        <td><div class="bodytext">TEST <span id="test"></span></div></td>
+        <tr></td>
+
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
       </tr>
       <tr>
         <td><div class="bodytext">RL110</div></td>
-        <td><div class="tabledata" id = "rl110"></div></td>
         <td><button type="button" class = "btn" id = "btn110" onclick="ButtonPress110()">Toggle</button></td>
         
         <td><div class="bodytext">RL103</div></td>
-        <td><div class="tabledata" id = "rl103"></div></td>
         <td><button type="button" class = "btn" id = "btn103" onclick="ButtonPress103()">Toggle</button></td>
         
         <td><div class="bodytext">RL117</div></td>
-        <td><div class="tabledata" id = "rl117"></div></td>
         <td><button type="button" class = "btn" id = "btn117" onclick="ButtonPress117()">Toggle</button></td>
+      
+        <td></td>
+        <td></td>
+        
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
       </tr>
       <tr>
         <td><div class="bodytext">RL111</div></td>
-        <td><div class="tabledata" id = "rl111"></div></td>
         <td><button type="button" class = "btn" id = "btn111" onclick="ButtonPress111()">Toggle</button></td>
         
         <td><div class="bodytext">RL104</div></td>
-        <td><div class="tabledata" id = "rl104"></div></td>
         <td><button type="button" class = "btn" id = "btn104" onclick="ButtonPress104()">Toggle</button></td>
         
         <td><div class="bodytext">RL101</div></td>
-        <td><div class="tabledata" id = "rl101"></div></td>
         <td><button type="button" class = "btn" id = "btn101" onclick="ButtonPress101()">Toggle</button></td>
+      
+        <td></td>
+        <td></td>
+        
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
       </tr>
       </table>
 
@@ -629,121 +665,97 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       document.getElementById("sensor").innerHTML=message;
       if (message[0] == 1) {
         document.getElementById("swr1").innerHTML="Over 1.5";
-        document.getElementById("switch").style.color="#0000AA"; 
+        document.getElementById("swr1").style.backgroundColor="rgb(200,000,000)";
       } else {
         document.getElementById("swr1").innerHTML="Less 1.5";
-        document.getElementById("switch").style.color="#00AA00";
+        document.getElementById("swr1").style.backgroundColor="rgb(000,200,000)";
       }
       if (message[1] == 1) {
         document.getElementById("swr2").innerHTML="Over 2";
-        document.getElementById("switch").style.color="#0000AA"; 
+        document.getElementById("swr2").style.backgroundColor="rgb(200,000,000)";
       } else {
         document.getElementById("swr2").innerHTML="Less 2";
-        document.getElementById("switch").style.color="#00AA00";
+        document.getElementById("swr2").style.backgroundColor="rgb(000,200,000)";
       }
       if (message[2] == 1) {
         document.getElementById("swr3").innerHTML="Over 3";
-        document.getElementById("switch").style.color="#0000AA"; 
+        document.getElementById("swr3").style.backgroundColor="rgb(200,000,000)";
       } else {
         document.getElementById("swr3").innerHTML="Less 3";
-        document.getElementById("switch").style.color="#00AA00";
+        document.getElementById("swr3").style.backgroundColor="rgb(000,200,000)";
       }
       document.getElementById("hiz").style.backgroundColor="rgb(000,000,200)";
       if (message[3] == 1) {
         document.getElementById("hiz").innerHTML="Over 50";
-        document.getElementById("switch").style.color="#0000AA"; 
       } else {
         document.getElementById("hiz").innerHTML="Less 50";
-        document.getElementById("switch").style.color="#00AA00";
       }
       document.getElementById("phi").style.backgroundColor="rgb(000,000,200)";
       if (message[4] == 1) {
         document.getElementById("phi").innerHTML="Inductive";
-        document.getElementById("switch").style.color="#0000AA"; 
       } else {
         document.getElementById("phi").innerHTML="Capacitive";
-        document.getElementById("switch").style.color="#00AA00";
+
       }
       if (message[5] == 1) {
         document.getElementById("pwr3").innerHTML="Over 3W";
-        document.getElementById("switch").style.color="#0000AA"; 
+        document.getElementById("pwr3").style.backgroundColor="rgb(200,000,000)";
       } else {
         document.getElementById("pwr3").innerHTML="Less 3W";
-        document.getElementById("switch").style.color="#00AA00";
+        document.getElementById("pwr3").style.backgroundColor="rgb(000,200,000)";
       }
 
       xmldoc = xmlResponse.getElementsByTagName("SERCAP");
       message = xmldoc[0].firstChild.nodeValue;
       document.getElementById("sercap").innerHTML=message;
-      document.getElementById("btn105").style.backgroundColor="rgb(200,200,200)";
-      if (message[0] == 1){
-        document.getElementById("rl105").innerHTML="Switch is OFF";
-        document.getElementById("btn105").innerHTML="Turn ON";
-        document.getElementById("rl105").style.color="#0000AA"; 
+      if (message[7] == 1) {
+        document.getElementById("btn105").innerHTML="ON";
+        document.getElementById("btn105").style.backgroundColor="rgb(200,000,000)";
       } else {
-        document.getElementById("rl105").innerHTML="Switch is ON";
-        document.getElementById("btn105").innerHTML="Turn OFF";
-        document.getElementById("rl105").style.color="#00AA00";
+        document.getElementById("btn105").innerHTML="OFF";
+        document.getElementById("btn105").style.backgroundColor="rgb(000,200,000)";
       }
-      document.getElementById("btn106").style.backgroundColor="rgb(200,200,200)";
-      if (message[1] == 1){
-        document.getElementById("rl106").innerHTML="Switch is OFF";
-        document.getElementById("btn106").innerHTML="Turn ON";
-        document.getElementById("rl106").style.color="#0000AA"; 
+      if (message[6] == 1) {
+        document.getElementById("btn106").innerHTML="ON";
+        document.getElementById("btn106").style.backgroundColor="rgb(200,000,000)";
       } else {
-        document.getElementById("rl106").innerHTML="Switch is ON";
-        document.getElementById("btn106").innerHTML="Turn OFF";
-        document.getElementById("rl106").style.color="#00AA00";
+        document.getElementById("btn106").innerHTML="OFF";
+        document.getElementById("btn106").style.backgroundColor="rgb(000,200,000)";
       }
-      document.getElementById("btn107").style.backgroundColor="rgb(200,200,200)";
+      if (message[5] == 1) {
+        document.getElementById("btn107").innerHTML="ON";
+        document.getElementById("btn107").style.backgroundColor="rgb(200,000,000)";
+      } else {
+        document.getElementById("btn107").innerHTML="OFF";
+        document.getElementById("btn107").style.backgroundColor="rgb(000,200,000)";
+      }
+      if (message[4] == 1) {
+        document.getElementById("btn108").innerHTML="ON";
+        document.getElementById("btn108").style.backgroundColor="rgb(200,000,000)";
+      } else {
+        document.getElementById("btn108").innerHTML="OFF";
+        document.getElementById("btn108").style.backgroundColor="rgb(000,200,000)";
+      }
+      if (message[3] == 1) {
+        document.getElementById("btn109").innerHTML="ON";
+        document.getElementById("btn109").style.backgroundColor="rgb(200,000,000)";
+      } else {
+        document.getElementById("btn109").innerHTML="OFF";
+        document.getElementById("btn109").style.backgroundColor="rgb(000,200,000)";
+      }
       if (message[2] == 1){
-        document.getElementById("rl107").innerHTML="Switch is OFF";
-        document.getElementById("btn107").innerHTML="Turn ON";
-        document.getElementById("rl107").style.color="#0000AA"; 
+        document.getElementById("btn110").innerHTML="ON";
+        document.getElementById("btn110").style.backgroundColor="rgb(200,000,000)";
       } else {
-        document.getElementById("rl107").innerHTML="Switch is ON";
-        document.getElementById("btn107").innerHTML="Turn OFF";
-        document.getElementById("rl107").style.color="#00AA00";
+        document.getElementById("btn110").innerHTML="OFF";
+        document.getElementById("btn110").style.backgroundColor="rgb(000,200,000)";
       }
-      document.getElementById("btn108").style.backgroundColor="rgb(200,200,200)";
-      if (message[3] == 1){
-        document.getElementById("rl108").innerHTML="Switch is OFF";
-        document.getElementById("btn108").innerHTML="Turn ON";
-        document.getElementById("rl108").style.color="#0000AA"; 
+      if (message[1] == 1){
+        document.getElementById("btn111").innerHTML="ON";
+        document.getElementById("btn111").style.backgroundColor="rgb(200,000,000)";
       } else {
-        document.getElementById("rl108").innerHTML="Switch is ON";
-        document.getElementById("btn108").innerHTML="Turn OFF";
-        document.getElementById("rl108").style.color="#00AA00";
-      }
-      document.getElementById("btn109").style.backgroundColor="rgb(200,200,200)";
-      if (message[4] == 1){
-        document.getElementById("rl109").innerHTML="Switch is OFF";
-        document.getElementById("btn109").innerHTML="Turn ON";
-        document.getElementById("rl109").style.color="#0000AA"; 
-      } else {
-        document.getElementById("rl109").innerHTML="Switch is ON";
-        document.getElementById("btn109").innerHTML="Turn OFF";
-        document.getElementById("rl109").style.color="#00AA00";
-      }
-      document.getElementById("btn110").style.backgroundColor="rgb(200,200,200)";
-      if (message[5] == 1){
-        document.getElementById("rl110").innerHTML="Switch is OFF";
-        document.getElementById("btn110").innerHTML="Turn ON";
-        document.getElementById("rl110").style.color="#0000AA"; 
-      } else {
-        document.getElementById("rl110").innerHTML="Switch is ON";
-        document.getElementById("btn110").innerHTML="Turn OFF";
-        document.getElementById("rl110").style.color="#00AA00";
-      }
-      document.getElementById("btn111").style.backgroundColor="rgb(200,200,200)";
-      if (message[6] == 1){
-        document.getElementById("rl111").innerHTML="Switch is OFF";
-        document.getElementById("btn111").innerHTML="Turn ON";
-        document.getElementById("rl111").style.color="#0000AA"; 
-      } else {
-        document.getElementById("rl111").innerHTML="Switch is ON";
-        document.getElementById("btn111").innerHTML="Turn OFF";
-        document.getElementById("rl111").style.color="#00AA00";
+        document.getElementById("btn111").innerHTML="OFF";
+        document.getElementById("btn111").style.backgroundColor="rgb(000,200,000)";
       }
 
       xmldoc = xmlResponse.getElementsByTagName("SERIND");
