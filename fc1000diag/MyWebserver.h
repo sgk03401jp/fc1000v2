@@ -564,6 +564,48 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       xhttp.open("PUT", "BUTTON_111", false);
       xhttp.send(); 
     }  
+    function ButtonPress118() {
+      var xhttp = new XMLHttpRequest(); 
+      xhttp.open("PUT", "BUTTON_118", false);
+      xhttp.send(); 
+    }  
+    function ButtonPress119() {
+      var xhttp = new XMLHttpRequest(); 
+      xhttp.open("PUT", "BUTTON_119", false);
+      xhttp.send(); 
+    }  
+    function ButtonPress120() {
+      var xhttp = new XMLHttpRequest(); 
+      xhttp.open("PUT", "BUTTON_120", false);
+      xhttp.send(); 
+    }  
+    function ButtonPress121() {
+      var xhttp = new XMLHttpRequest(); 
+      xhttp.open("PUT", "BUTTON_121", false);
+      xhttp.send(); 
+    }  
+    function ButtonPress122() {
+      var xhttp = new XMLHttpRequest(); 
+      xhttp.open("PUT", "BUTTON_122", false);
+      xhttp.send(); 
+    }  
+    function ButtonPress103() {
+      var xhttp = new XMLHttpRequest(); 
+      xhttp.open("PUT", "BUTTON_103", false);
+      xhttp.send(); 
+    }
+
+    function ButtonPress104() {
+      var xhttp = new XMLHttpRequest(); 
+      xhttp.open("PUT", "BUTTON_104", false);
+      xhttp.send(); 
+    }    
+
+    function ButtonPress101() {
+      var xhttp = new XMLHttpRequest(); 
+      xhttp.open("PUT", "BUTTON_101", false);
+      xhttp.send(); 
+    }
 
     function UpdateSlider(value) {
       var xhttp = new XMLHttpRequest();
@@ -814,15 +856,13 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       xmldoc = xmlResponse.getElementsByTagName("PARIND");
       message = xmldoc[0].firstChild.nodeValue;
       document.getElementById("parind").innerHTML=message;
-      document.getElementById("rl101").style.backgroundColor="rgb(200,200,200)";
-      if (message[7] == 0){
-        document.getElementById("rl101").innerHTML="Switch is OFF";
-        document.getElementById("btn101").innerHTML="O N";
-        document.getElementById("rl101").style.color="#0000AA"; 
-      } else {
-        document.getElementById("rl101").innerHTML="Switch is ON";
+
+      if (message[0] == 1){
         document.getElementById("btn101").innerHTML="OFF";
-        document.getElementById("rl101").style.color="#00AA00";
+        document.getElementById("btn101").style.backgroundColor="rgb(200,000,000)";
+      } else {
+        document.getElementById("btn101").innerHTML="ON";
+        document.getElementById("btn101").style.backgroundColor="rgb(000,200,000)";
       }
 
       xmldoc = xmlResponse.getElementsByTagName("TEST");
@@ -860,14 +900,12 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       xmldoc = xmlResponse.getElementsByTagName("SWITCH");
       message = xmldoc[0].firstChild.nodeValue;
       // update the text in the table
-      if (message == 0){
-        document.getElementById("switch").innerHTML="Switch is OFF";
-        document.getElementById("btn1").innerHTML="Turn ON";
-        document.getElementById("switch").style.color="#0000AA"; 
+      if (message == 1) {
+        document.getElementById("btn1").innerHTML="ON";
+        document.getElementById("switch").style.backgroundColor="rgb(200,000,000)";
       } else {
-        document.getElementById("switch").innerHTML="Switch is ON";
-        document.getElementById("btn1").innerHTML="Turn OFF";
-        document.getElementById("switch").style.color="#00AA00";
+        document.getElementById("btn1").innerHTML="OFF";
+        document.getElementById("switch").style.backgroundColor="rgb(000,200,000)";
       }
 
       // Add this part to update the content of the Emergency Mode cell
