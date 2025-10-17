@@ -71,7 +71,7 @@ void ParIndTest();
 int BitsA0 = 0, BitsA1 = 0;
 float VoltsA0 = 0, VoltsA1 = 0;
 uint32_t SensorUpdate = 0;
-int FanSpeed = 0;
+int FanSpeed = 1000;
 bool LED0 = false, SomeOutput = false;
 bool emergencyShutdownActive = false;
 float temperature = 0.0;
@@ -164,7 +164,7 @@ void setup(void) {
 
   xTaskCreateUniversal(ADC_Function,        "mainTask",   4096, NULL, 1, &mainTask, 0);
   // Create FreeRTOS tasks
-  xTaskCreateUniversal(IR_Sensor_Function,  "Task1",      4096, NULL, 2, &Task1Handle, 0);
+  xTaskCreateUniversal(Test_Interval_Function,  "Task1",      4096, NULL, 2, &Task1Handle, 0);
   xTaskCreateUniversal(HDC_Sensor_Function, "Task2",      4096, NULL, 2, &Task2Handle, 0);
   xTaskCreateUniversal(Emergency_Function,  "Task3",      4096, NULL, 3, &Task3Handle, 0);
   // Create a server task pinned to core 1
@@ -400,7 +400,6 @@ void SendXML() {
     strcat(XML, "<LED>0</LED>\n");
   }
 
-sensor.byte++;
   sprintf(buf, "<SENSOR>000%0d%0d%0d%0d%0d</SENSOR>\n", 
     sensor.bits.b5, sensor.bits.b4, sensor.bits.b3, sensor.bits.b2,
     sensor.bits.b1, sensor.bits.b0);
@@ -494,21 +493,25 @@ void ServerTask(void *pvParameters) {
   }
 }
 
-void IR_Sensor_Function(void *pvParameters) {
+void Test_Interval_Function(void *pvParameters) {
   taskCount++;
 //  pinMode(IR_SENSOR_PIN, INPUT);
 
   while (1) {
-    // Read data from the analog IR sensor
-    int irSensorValue ; //= analogRead(IR_SENSOR_PIN);
-
-    // Process the sensor data
-    if (irSensorValue < 500) {
-      Serial.println("IR sensor detected an obstacle!");
-    } else {
-      Serial.println("No obstacle detected.");
+    if (rytest.bits.b0 == 1) {
+      sensor.byte++;
     }
-    vTaskDelay(pdMS_TO_TICKS(1000));  // Adjust the delay as needed
+    if (rytest.bits.b1 == 1) {
+      sercap.byte++;
+    }
+    if (rytest.bits.b2 == 1) {
+      serind.byte++;
+    }
+    if (rytest.bits.b3 == 1) {
+      parind.byte++;
+    }
+
+    vTaskDelay(pdMS_TO_TICKS(FanSpeed));  // Adjust the delay as needed
   }
 }
 
