@@ -227,10 +227,8 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
   
     <main class="container" style="margin-top:70px">
 <table>
-<!--    
-     <div class="category">System Status</div>
+      <div class="category">System Status</div>
       <div style="border-radius: 10px !important;">
--->
 <table>
 <!--
       <colgroup>
@@ -251,6 +249,9 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
         <th colspan="1"><div class="heading">Core</div></th>
         <th colspan="1"><div class="heading">Status</div></th>
         <th colspan="1"><div class="heading">Temp(&deg;C)</div></th>
+        <th colspan="1"><div class="heading">Switch</div></th>
+        <th colspan="1"><div class="heading">Emergency</div></th>
+
       </tr>
       <tr>
         <td><div class="bodytext">Forward Power</div></td>
@@ -259,6 +260,8 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
         <td><div class="bodytext">Core 0</div></td>
         <td><div id="core0Status" class="tabledata"></div></td>
         <td><div class="tabledata" id="dhtTemperature"></div></td>
+        <td><div class="tabledata" id ="switch"></div></td>
+        <td><div class="tabledata" id="emergencyMode"></div>
       </tr>
       <tr>
         <td><div class="bodytext">Refrect Power</div></td>
@@ -267,6 +270,8 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
         <td><div class="bodytext">Core 1</div></td>
         <td><div id="core1Status" class="tabledata"></div></td>
         <td><div class="tabledata" id="dhtHumidity"></td>
+        <td></td>
+        <td></td>
       </tr>
 </table>
 <br>
@@ -290,11 +295,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
         <td><div class="bodytext">Power</div></td>
         <td><div class="tabledata" id = "pwr3"></div></td>
 
-        <td><div class="bodytext">Digital switch</div></td>
-        <td><div class="tabledata" id = "switch"></div></td>
 
-        <td><div class="bodytext">Emergency Mode</div></td>
-        <td><div class="tabledata" id="emergencyMode"></div>
 
         </td>
       </tr>
@@ -900,52 +901,52 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       message = xmldoc[0].firstChild.nodeValue;
       document.getElementById("parind").innerHTML=message;
       if (message[7] == 1){
-        document.getElementById("btn112").innerHTML="OFF";
+        document.getElementById("btn112").innerHTML="ON";
         document.getElementById("btn112").style.backgroundColor="rgb(200,000,000)";
       } else {
-        document.getElementById("btn112").innerHTML="ON";
+        document.getElementById("btn112").innerHTML="OFF";
         document.getElementById("btn112").style.backgroundColor="rgb(000,200,000)";
       }
       if (message[6] == 1){
-        document.getElementById("btn113").innerHTML="OFF";
+        document.getElementById("btn113").innerHTML="ON";
         document.getElementById("btn113").style.backgroundColor="rgb(200,000,000)";
       } else {
-        document.getElementById("btn113").innerHTML="ON";
+        document.getElementById("btn113").innerHTML="OFF";
         document.getElementById("btn113").style.backgroundColor="rgb(000,200,000)";
       }
       if (message[5] == 1){
-        document.getElementById("btn114").innerHTML="OFF";
+        document.getElementById("btn114").innerHTML="ON";
         document.getElementById("btn114").style.backgroundColor="rgb(200,000,000)";
       } else {
-        document.getElementById("btn114").innerHTML="ON";
+        document.getElementById("btn114").innerHTML="OFF";
         document.getElementById("btn114").style.backgroundColor="rgb(000,200,000)";
       }
       if (message[4] == 1){
-        document.getElementById("btn115").innerHTML="OFF";
+        document.getElementById("btn115").innerHTML="ON";
         document.getElementById("btn115").style.backgroundColor="rgb(200,000,000)";
       } else {
-        document.getElementById("btn115").innerHTML="ON";
+        document.getElementById("btn115").innerHTML="OFF";
         document.getElementById("btn115").style.backgroundColor="rgb(000,200,000)";
       }
       if (message[3] == 1){
-        document.getElementById("btn116").innerHTML="OFF";
+        document.getElementById("btn116").innerHTML="ON";
         document.getElementById("btn116").style.backgroundColor="rgb(200,000,000)";
       } else {
-        document.getElementById("btn116").innerHTML="ON";
+        document.getElementById("btn116").innerHTML="OFF";
         document.getElementById("btn116").style.backgroundColor="rgb(000,200,000)";
       }
       if (message[2] == 1){
-        document.getElementById("btn117").innerHTML="OFF";
+        document.getElementById("btn117").innerHTML="ON";
         document.getElementById("btn117").style.backgroundColor="rgb(200,000,000)";
       } else {
-        document.getElementById("btn117").innerHTML="ON";
+        document.getElementById("btn117").innerHTML="OFF";
         document.getElementById("btn117").style.backgroundColor="rgb(000,200,000)";
       }
       if (message[0] == 1){
-        document.getElementById("btn101").innerHTML="OFF";
+        document.getElementById("btn101").innerHTML="ON";
         document.getElementById("btn101").style.backgroundColor="rgb(200,000,000)";
       } else {
-        document.getElementById("btn101").innerHTML="ON";
+        document.getElementById("btn101").innerHTML="OFF";
         document.getElementById("btn101").style.backgroundColor="rgb(000,200,000)";
       }
 
