@@ -302,10 +302,10 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
         <td><div class="tabledata" id="dhtHumidity"></div></td>
       </tr>
       </table>
-    <br>
     </table>
-    <br>
+      <div class="category">Relay Controls</div>
       <table>
+<!--
       <colgroup>
         <col span="1" ; width: 10%; color:#000000 ;">
         <col span="1" ; width: 10%; color:#000000 ;">
@@ -317,6 +317,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
         <col span="1" ; width: 10%; color:#000000 ;">
         <col span="1" ; width: 12%; color:#000000 ;">
       </colgroup>
+-->
       <tr>
         <td><div class="bodytext">RL105</div></td>
         <td><button type="button" class = "btn" id = "btn105" onclick="ButtonPress105()">Toggle</button></td>
@@ -447,7 +448,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       </table>
 
     <br>
-    <div class="category">Relay Controls</div>
+  
     <br>
     <div class="bodytext">Inbuilt LED </div>
     <button type="button" class = "btn" id = "btn0" onclick="ButtonPress0()">Toggle</button>
@@ -1014,10 +1015,6 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       xmldoc = xmlResponse.getElementsByTagName("CORE1_STATUS");
       message = xmldoc[0].firstChild.nodeValue;
       document.getElementById("core1Status").innerHTML = message === "1" ? "In Use" : "Not In Use";
-
-      xmldoc = xmlResponse.getElementsByTagName("TASK_COUNT");
-      var taskCount = xmldoc[0].firstChild.nodeValue;
-      document.getElementById("taskCount").innerHTML = taskCount;
 
       // Fetch and update DHT11 live readings
       xmldoc = xmlResponse.getElementsByTagName("DHT_READINGS");

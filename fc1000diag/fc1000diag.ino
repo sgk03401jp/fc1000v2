@@ -400,7 +400,7 @@ void SendXML() {
     strcat(XML, "<LED>0</LED>\n");
   }
 
-  sprintf(buf, "<SENSOR>000%0d%0d%0d%0d%0d</SENSOR>\n", 
+  sprintf(buf, "<SENSOR>00%0d%0d%0d%0d%0d%0d</SENSOR>\n", 
     sensor.bits.b5, sensor.bits.b4, sensor.bits.b3, sensor.bits.b2,
     sensor.bits.b1, sensor.bits.b0);
   strcat(XML, buf);
@@ -457,10 +457,6 @@ void SendXML() {
     strcat(XML, "0");
   }
   strcat(XML, "</CORE1_STATUS>\n");
-  
-  strcat(XML, "<TASK_COUNT>");
-  strcat(XML, String(taskCount).c_str());
-  strcat(XML, "</TASK_COUNT>\n");
 
   // Append temperature and humidity data to XML
   strcat(XML, "<DHT_READINGS>\n");
