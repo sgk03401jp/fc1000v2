@@ -2,52 +2,16 @@
 ## Migrate Original CPU to ES32S3
 
 ### sercap
-| bit | Relay
-|---|---
-| b0 | RL105
-| b1 | RL106
-| b2 | RL107
-| b3 | RL108
-| b4 | RL109
-| b5 | RL110
-| b6 | RL111
-| b7 | 
-
-### serind
-| bit | Relay
-|---|---
-| b0 | RL118
-| b1 | RL119
-| b2 | RL120
-| b3 | RL121
-| b4 | RL122
-| b5 | 
-| b6 | RL103
-| b7 | RL104
-
-### parind
-| bit | Relay
-|---|---
-| b0 | RL112
-| b1 | RL113
-| b2 | RL114
-| b3 | RL115
-| b4 | RL116
-| b5 | RL117
-| b6 | 
-| b7 | RL101,RL102
-
-### sensor
-| bit | Relay
-|---|---
-| b0 | SWR 1
-| b1 | SWR 2
-| b2 | SWR 3
-| b3 | Z(HiZ)
-| b4 | Phi
-| b5 | PWR 3
-| b6 | 
-| b7 | 
+| bit | SERCAP | SERIND | PARIND | SENSOR | TEST |
+| --- | --- | --- | ---| --- | --- |
+| b0 | RL105 | RL118 | RL112 | SWR 1 | SENSOR
+| b1 | RL106 | RL119 | RL113 | SWR 2 | SERCAP
+| b2 | RL107 | RL120 | RL114 | SWR 3 | SERIND
+| b3 | RL108 | RL121 | RL115 | Z(HiZ)| PARIND
+| b4 | RL109 | RL122 | RL116 | Phi
+| b5 | RL110 | |RL117 |
+| b6 | RL111 | RL103 | |
+| b7 | | RL104 | RL101,RL102 |
 
 ![alt text](image/ScreenShot.png)
 
