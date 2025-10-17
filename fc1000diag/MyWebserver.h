@@ -250,6 +250,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
         <th colspan="1"><div class="heading">Volts</div></th>
         <th colspan="1"><div class="heading">Core</div></th>
         <th colspan="1"><div class="heading">Status</div></th>
+        <th colspan="1"><div class="heading">Temp(&deg;C)</div></th>
       </tr>
       <tr>
         <td><div class="bodytext">Forward Power</div></td>
@@ -257,7 +258,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
         <td><div class="tabledata" id = "v0"></div></td>
         <td><div class="bodytext">Core 0</div></td>
         <td><div id="core0Status" class="tabledata"></div></td>
-        
+        <td><div class="tabledata" id="dhtTemperature"></div></td>
       </tr>
       <tr>
         <td><div class="bodytext">Refrect Power</div></td>
@@ -265,6 +266,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
         <td><div class="tabledata" id = "v1"></div></td>
         <td><div class="bodytext">Core 1</div></td>
         <td><div id="core1Status" class="tabledata"></div></td>
+        <td><div class="tabledata" id="dhtHumidity"></td>
       </tr>
 </table>
 <br>
@@ -279,13 +281,6 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
         <td><div class="bodytext">SWR3</div></td>
         <td><div class="tabledata" id = "swr3"></div></td>
 
-        <td><div class="bodytext">Digital switch</div></td>
-        <td><div class="tabledata" id = "switch"></div></td>
-
-        <td><div class="heading">Temp(&deg;C)</div></td>
-        <td><div class="tabledata" id="dhtTemperature"></div></td>
-      </tr>
-      <tr>
         <td><div class="bodytext">Hiz</div></td>
         <td><div class="tabledata" id = "hiz"></div></td>
 
@@ -295,11 +290,13 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
         <td><div class="bodytext">Power</div></td>
         <td><div class="tabledata" id = "pwr3"></div></td>
 
+        <td><div class="bodytext">Digital switch</div></td>
+        <td><div class="tabledata" id = "switch"></div></td>
+
         <td><div class="bodytext">Emergency Mode</div></td>
         <td><div class="tabledata" id="emergencyMode"></div>
 
-        <td><div class="heading">Humidity (%)</div></td>
-        <td><div class="tabledata" id="dhtHumidity"></div></td>
+        </td>
       </tr>
       </table>
     </table>
