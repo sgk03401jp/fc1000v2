@@ -6,9 +6,14 @@
 #include "MyWebserver.h"
 #include "Adafruit_HDC1000.h"
 #include <MCP23017.h>
+#include <Wire.h>
+#include <MCP23017.h>
 
 #define PIN_A0 0  // Forward Power
 #define PIN_A1 1  // Refrect Power
+
+#define MCP23017_ADDR 0x20
+MCP23017 mcp = MCP23017(MCP23017_ADDR);
 
 /* Actual data stored in WiFiSettings.h */
 //const char *ssid = "YOUR_SSID";
@@ -97,6 +102,7 @@ void handleNotFound() {
 }
 
 void setup(void) {
+  Wire.begin();
   Serial.begin(115200);
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
@@ -116,6 +122,10 @@ void setup(void) {
   if (MDNS.begin("esp32")) {
     Serial.println("MDNS responder started");
   }
+
+  mcp.init();
+  mcp.portMode(MCP23017Port::A, 0); //Port A as output
+  mcp.portMode(MCP23017Port::B, 0); //Port B as input
 
   if (!hdc.begin()) {
     Serial.println("Couldn't find sensor!");
@@ -162,13 +172,13 @@ void setup(void) {
   server.begin();
   Serial.println("HTTP server started");
 
-  xTaskCreateUniversal(ADC_Function,        "mainTask",   4096, NULL, 1, &mainTask, 0);
+  xTaskCreateUniversal(ADC_Function,            "mainTask",   4096, NULL, 1, &mainTask, 0);
   // Create FreeRTOS tasks
   xTaskCreateUniversal(Test_Interval_Function,  "Task1",      4096, NULL, 2, &Task1Handle, 0);
-  xTaskCreateUniversal(HDC_Sensor_Function, "Task2",      4096, NULL, 2, &Task2Handle, 0);
-  xTaskCreateUniversal(Emergency_Function,  "Task3",      4096, NULL, 3, &Task3Handle, 0);
+  xTaskCreateUniversal(HDC_Sensor_Function,     "Task2",      4096, NULL, 2, &Task2Handle, 0);
+  xTaskCreateUniversal(RelayControl_Function,   "Task3",      4096, NULL, 3, &Task3Handle, 0);
   // Create a server task pinned to core 1
-  xTaskCreateUniversal(ServerTask,          "serverTask", 8192, NULL, 3, &serverTask, 1);
+  xTaskCreateUniversal(ServerTask,              "serverTask", 8192, NULL, 3, &serverTask, 1);
 }
 
 void loop(void) {
@@ -199,9 +209,6 @@ void UpdateSlider() {
 
   // Map FanSpeed to LED brightness
   int ledBrightness = map(FanSpeed, 100, 5000, 100, 5000);
-
-  // Set LED brightness 
-//  analogWrite(PIN_FAN, ledBrightness);
 
   // Respond with the updated RPM value
   server.send(200, "text/plain", String(FanSpeed));
@@ -529,45 +536,19 @@ void HDC_Sensor_Function(void *pvParameters) {
   }
 }
 
-void Emergency_Function(void *pvParameters) {
+void RelayControl_Function(void *pvParameters) {
   taskCount++;
-  //pinMode(ULTRASONIC_TRIGGER_PIN, OUTPUT);
-//  pinMode(ULTRASONIC_ECHO_PIN, INPUT);
-//  pinMode(BUZZER_PIN, OUTPUT);
 
   while (1) {
-    // Trigger ultrasonic sensor
-//    digitalWrite(ULTRASONIC_TRIGGER_PIN, LOW);
-    delayMicroseconds(2);
-//    digitalWrite(ULTRASONIC_TRIGGER_PIN, HIGH);
-    delayMicroseconds(10);
-//    digitalWrite(ULTRASONIC_TRIGGER_PIN, LOW);
+//    uint8_t currentB;
 
-    // Read the ultrasonic sensor echo
-    long duration; // = pulseIn(ULTRASONIC_ECHO_PIN, HIGH);
-    // Calculate distance in centimeters
-    float distance = duration * 0.034 / 2;
-    Serial.print("Distance: ");
-    Serial.println(distance);
-    char a= Serial.read();
-    // Check if an obstacle is detected (adjust the distance threshold as needed)
-    if (distance < 20) {
-    // if (a == 'E') {
-      // Activate emergency mode only if not already active
-      if (!emergencyShutdownActive) {
-        emergencyShutdownActive = true;
-        EmergencyShutdown();
-//        digitalWrite(BUZZER_PIN, HIGH);
-      }
-    } else {
-      // Deactivate emergency mode only if it was active
-      if (emergencyShutdownActive) {
-        emergencyShutdownActive = false;
-//        digitalWrite(BUZZER_PIN, LOW);
-        // Add any post-emergency code here if needed
-      }
-    }
-    vTaskDelay(pdMS_TO_TICKS(1000));  // Adjust the delay as needed
+    mcp.writeRegister(MCP23017Register::GPIO_A, sercap.byte);  //Reset port A 
+    mcp.writeRegister(MCP23017Register::GPIO_B, serind.byte);  //Reset port B
+
+//    currentB = mcp.readPort(MCP23017Port::B);
+//    mcp.writePort(MCP23017Port::A, currentB);
+
+    vTaskDelay(pdMS_TO_TICKS(500));  // Adjust the delay as needed
   }
 }
 
