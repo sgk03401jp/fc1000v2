@@ -796,49 +796,49 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       document.getElementById("sercap").innerHTML=message;
       if (message[7] == 1) {
         document.getElementById("btn105").innerHTML="ON";
-        document.getElementById("btn105").style.backgroundColor="rgb(200,000,000)";
+        document.getElementById("btn105").style.backgroundColor="rgb(200,100,000)";
       } else {
         document.getElementById("btn105").innerHTML="OFF";
         document.getElementById("btn105").style.backgroundColor="rgb(000,200,000)";
       }
       if (message[6] == 1) {
         document.getElementById("btn106").innerHTML="ON";
-        document.getElementById("btn106").style.backgroundColor="rgb(200,000,000)";
+        document.getElementById("btn106").style.backgroundColor="rgb(200,100,000)";
       } else {
         document.getElementById("btn106").innerHTML="OFF";
         document.getElementById("btn106").style.backgroundColor="rgb(000,200,000)";
       }
       if (message[5] == 1) {
         document.getElementById("btn107").innerHTML="ON";
-        document.getElementById("btn107").style.backgroundColor="rgb(200,000,000)";
+        document.getElementById("btn107").style.backgroundColor="rgb(200,100,000)";
       } else {
         document.getElementById("btn107").innerHTML="OFF";
         document.getElementById("btn107").style.backgroundColor="rgb(000,200,000)";
       }
       if (message[4] == 1) {
         document.getElementById("btn108").innerHTML="ON";
-        document.getElementById("btn108").style.backgroundColor="rgb(200,000,000)";
+        document.getElementById("btn108").style.backgroundColor="rgb(200,100,000)";
       } else {
         document.getElementById("btn108").innerHTML="OFF";
         document.getElementById("btn108").style.backgroundColor="rgb(000,200,000)";
       }
       if (message[3] == 1) {
         document.getElementById("btn109").innerHTML="ON";
-        document.getElementById("btn109").style.backgroundColor="rgb(200,000,000)";
+        document.getElementById("btn109").style.backgroundColor="rgb(200,100,000)";
       } else {
         document.getElementById("btn109").innerHTML="OFF";
         document.getElementById("btn109").style.backgroundColor="rgb(000,200,000)";
       }
       if (message[2] == 1){
         document.getElementById("btn110").innerHTML="ON";
-        document.getElementById("btn110").style.backgroundColor="rgb(200,000,000)";
+        document.getElementById("btn110").style.backgroundColor="rgb(200,100,000)";
       } else {
         document.getElementById("btn110").innerHTML="OFF";
         document.getElementById("btn110").style.backgroundColor="rgb(000,200,000)";
       }
       if (message[1] == 1){
         document.getElementById("btn111").innerHTML="ON";
-        document.getElementById("btn111").style.backgroundColor="rgb(200,000,000)";
+        document.getElementById("btn111").style.backgroundColor="rgb(200,100,000)";
       } else {
         document.getElementById("btn111").innerHTML="OFF";
         document.getElementById("btn111").style.backgroundColor="rgb(000,200,000)";
@@ -849,49 +849,49 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       document.getElementById("serind").innerHTML=message;
       if (message[7] == 1){
         document.getElementById("btn118").innerHTML="ON";
-        document.getElementById("btn118").style.backgroundColor="rgb(200,000,000)";
+        document.getElementById("btn118").style.backgroundColor="rgb(200,100,000)";
       } else {
         document.getElementById("btn118").innerHTML="OFF";
         document.getElementById("btn118").style.backgroundColor="rgb(000,200,000)";
       }
       if (message[6] == 1){
         document.getElementById("btn119").innerHTML="ON";
-        document.getElementById("btn119").style.backgroundColor="rgb(200,000,000)";
+        document.getElementById("btn119").style.backgroundColor="rgb(200,100,000)";
       } else {
         document.getElementById("btn119").innerHTML="OFF";
         document.getElementById("btn119").style.backgroundColor="rgb(000,200,000)";
       }
       if (message[5] == 1){
         document.getElementById("btn120").innerHTML="ON";
-        document.getElementById("btn120").style.backgroundColor="rgb(200,000,000)";
+        document.getElementById("btn120").style.backgroundColor="rgb(200,100,000)";
       } else {
         document.getElementById("btn120").innerHTML="OFF";
         document.getElementById("btn120").style.backgroundColor="rgb(000,200,000)";
       }
       if (message[4] == 1){
         document.getElementById("btn121").innerHTML="ON";
-        document.getElementById("btn121").style.backgroundColor="rgb(200,000,000)";
+        document.getElementById("btn121").style.backgroundColor="rgb(200,100,000)";
       } else {
         document.getElementById("btn121").innerHTML="OFF";
         document.getElementById("btn121").style.backgroundColor="rgb(000,200,000)";
       }
       if (message[3] == 1){
         document.getElementById("btn122").innerHTML="ON";
-        document.getElementById("btn122").style.backgroundColor="rgb(200,000,000)";
+        document.getElementById("btn122").style.backgroundColor="rgb(200,100,000)";
       } else {
         document.getElementById("btn122").innerHTML="OFF";
         document.getElementById("btn122").style.backgroundColor="rgb(000,200,000)";
       }
       if (message[1] == 1){
         document.getElementById("btn103").innerHTML="ON";
-        document.getElementById("btn103").style.backgroundColor="rgb(200,000,000)";
+        document.getElementById("btn103").style.backgroundColor="rgb(200,100,000)";
       } else {
         document.getElementById("btn103").innerHTML="OFF";
         document.getElementById("btn103").style.backgroundColor="rgb(000,200,000)";
       }
       if (message[0] == 1){
         document.getElementById("btn104").innerHTML="ON";
-        document.getElementById("btn104").style.backgroundColor="rgb(200,000,000)";
+        document.getElementById("btn104").style.backgroundColor="rgb(200,100,000)";
       } else {
         document.getElementById("btn104").innerHTML="OFF";
         document.getElementById("btn104").style.backgroundColor="rgb(000,200,000)";
@@ -902,49 +902,49 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       document.getElementById("parind").innerHTML=message;
       if (message[7] == 1){
         document.getElementById("btn112").innerHTML="ON";
-        document.getElementById("btn112").style.backgroundColor="rgb(200,000,000)";
+        document.getElementById("btn112").style.backgroundColor="rgb(200,100,000)";
       } else {
         document.getElementById("btn112").innerHTML="OFF";
         document.getElementById("btn112").style.backgroundColor="rgb(000,200,000)";
       }
       if (message[6] == 1){
         document.getElementById("btn113").innerHTML="ON";
-        document.getElementById("btn113").style.backgroundColor="rgb(200,000,000)";
+        document.getElementById("btn113").style.backgroundColor="rgb(200,100,000)";
       } else {
         document.getElementById("btn113").innerHTML="OFF";
         document.getElementById("btn113").style.backgroundColor="rgb(000,200,000)";
       }
       if (message[5] == 1){
         document.getElementById("btn114").innerHTML="ON";
-        document.getElementById("btn114").style.backgroundColor="rgb(200,000,000)";
+        document.getElementById("btn114").style.backgroundColor="rgb(200,100,000)";
       } else {
         document.getElementById("btn114").innerHTML="OFF";
         document.getElementById("btn114").style.backgroundColor="rgb(000,200,000)";
       }
       if (message[4] == 1){
         document.getElementById("btn115").innerHTML="ON";
-        document.getElementById("btn115").style.backgroundColor="rgb(200,000,000)";
+        document.getElementById("btn115").style.backgroundColor="rgb(200,100,000)";
       } else {
         document.getElementById("btn115").innerHTML="OFF";
         document.getElementById("btn115").style.backgroundColor="rgb(000,200,000)";
       }
       if (message[3] == 1){
         document.getElementById("btn116").innerHTML="ON";
-        document.getElementById("btn116").style.backgroundColor="rgb(200,000,000)";
+        document.getElementById("btn116").style.backgroundColor="rgb(200,100,000)";
       } else {
         document.getElementById("btn116").innerHTML="OFF";
         document.getElementById("btn116").style.backgroundColor="rgb(000,200,000)";
       }
       if (message[2] == 1){
         document.getElementById("btn117").innerHTML="ON";
-        document.getElementById("btn117").style.backgroundColor="rgb(200,000,000)";
+        document.getElementById("btn117").style.backgroundColor="rgb(200,100,000)";
       } else {
         document.getElementById("btn117").innerHTML="OFF";
         document.getElementById("btn117").style.backgroundColor="rgb(000,200,000)";
       }
       if (message[0] == 1){
         document.getElementById("btn101").innerHTML="ON";
-        document.getElementById("btn101").style.backgroundColor="rgb(200,000,000)";
+        document.getElementById("btn101").style.backgroundColor="rgb(200,100,000)";
       } else {
         document.getElementById("btn101").innerHTML="OFF";
         document.getElementById("btn101").style.backgroundColor="rgb(000,200,000)";
@@ -955,28 +955,28 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       document.getElementById("test").innerHTML=message;
       if (message[7] == 1){
         document.getElementById("btnsensortest").innerHTML="ON";
-        document.getElementById("btnsensortest").style.backgroundColor="rgb(200,000,000)";
+        document.getElementById("btnsensortest").style.backgroundColor="rgb(200,200,200)";
       } else {
         document.getElementById("btnsensortest").innerHTML="OFF";
-        document.getElementById("btnsensortest").style.backgroundColor="rgb(000,200,000)";
+        document.getElementById("btnsensortest").style.backgroundColor="rgb(200,200,200)";
       }
       if (message[6] == 1){
         document.getElementById("btnsercaptest").innerHTML="ON";
-        document.getElementById("btnsercaptest").style.backgroundColor="rgb(200,000,000)";
+        document.getElementById("btnsercaptest").style.backgroundColor="rgb(200,100,000)";
       } else {
         document.getElementById("btnsercaptest").innerHTML="OFF";
         document.getElementById("btnsercaptest").style.backgroundColor="rgb(000,200,000)";
       }
       if (message[5] == 1){
         document.getElementById("btnserindtest").innerHTML="ON";
-        document.getElementById("btnserindtest").style.backgroundColor="rgb(200,000,000)";
+        document.getElementById("btnserindtest").style.backgroundColor="rgb(200,100,000)";
       } else {
         document.getElementById("btnserindtest").innerHTML="OFF";
         document.getElementById("btnserindtest").style.backgroundColor="rgb(000,200,000)";
       }
       if (message[4] == 1){
         document.getElementById("btnparindtest").innerHTML="ON";
-        document.getElementById("btnparindtest").style.backgroundColor="rgb(200,000,000)";
+        document.getElementById("btnparindtest").style.backgroundColor="rgb(200,100,000)";
       } else {
         document.getElementById("btnparindtest").innerHTML="OFF";
         document.getElementById("btnparindtest").style.backgroundColor="rgb(000,200,000)";
@@ -987,7 +987,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       // update the text in the table
       if (message == 1) {
         document.getElementById("switch").innerHTML="ON";
-        document.getElementById("switch").style.backgroundColor="rgb(200,000,000)";
+        document.getElementById("switch").style.backgroundColor="rgb(200,100,000)";
       } else {
         document.getElementById("switch").innerHTML="OFF";
         document.getElementById("switch").style.backgroundColor="rgb(000,200,000)";

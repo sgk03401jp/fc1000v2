@@ -12,8 +12,10 @@
 #define PIN_A0 0  // Forward Power
 #define PIN_A1 1  // Refrect Power
 
-#define MCP23017_ADDR 0x20
-MCP23017 mcp = MCP23017(MCP23017_ADDR);
+#define MCP23017_ADDR_1 0x20
+#define MCP23017_ADDR_2 0x21
+MCP23017 mcp1 = MCP23017(MCP23017_ADDR_1);
+MCP23017 mcp2 = MCP23017(MCP23017_ADDR_2);
 
 /* Actual data stored in WiFiSettings.h */
 //const char *ssid = "YOUR_SSID";
@@ -123,9 +125,14 @@ void setup(void) {
     Serial.println("MDNS responder started");
   }
 
-  mcp.init();
-  mcp.portMode(MCP23017Port::A, 0); //Port A as output
-  mcp.portMode(MCP23017Port::B, 0); //Port B as input
+  mcp1.init();
+  mcp2.init();
+
+  mcp1.portMode(MCP23017Port::A, 0); //Port A as output
+  mcp1.portMode(MCP23017Port::B, 0); //Port B as output
+
+  mcp2.portMode(MCP23017Port::A, 0); //Port A as output
+  mcp2.portMode(MCP23017Port::B, 0xff); //Port B as input
 
   if (!hdc.begin()) {
     Serial.println("Couldn't find sensor!");
@@ -540,13 +547,10 @@ void RelayControl_Function(void *pvParameters) {
   taskCount++;
 
   while (1) {
-//    uint8_t currentB;
-
-    mcp.writeRegister(MCP23017Register::GPIO_A, sercap.byte);  //Reset port A 
-    mcp.writeRegister(MCP23017Register::GPIO_B, serind.byte);  //Reset port B
-
-//    currentB = mcp.readPort(MCP23017Port::B);
-//    mcp.writePort(MCP23017Port::A, currentB);
+    mcp1.writeRegister(MCP23017Register::GPIO_A, sercap.byte);  //Reset port A 
+    mcp1.writeRegister(MCP23017Register::GPIO_B, serind.byte);  //Reset port B
+    mcp2.writeRegister(MCP23017Register::GPIO_A, sercap.byte);  //Reset port A 
+    sensor.byte = mcp2.readPort(MCP23017Port::B);
 
     vTaskDelay(pdMS_TO_TICKS(500));  // Adjust the delay as needed
   }
