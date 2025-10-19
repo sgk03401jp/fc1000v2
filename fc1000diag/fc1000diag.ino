@@ -549,7 +549,7 @@ void RelayControl_Function(void *pvParameters) {
   while (1) {
     mcp1.writeRegister(MCP23017Register::GPIO_A, sercap.byte);  //Reset port A 
     mcp1.writeRegister(MCP23017Register::GPIO_B, serind.byte);  //Reset port B
-    mcp2.writeRegister(MCP23017Register::GPIO_A, sercap.byte);  //Reset port A 
+    mcp2.writeRegister(MCP23017Register::GPIO_A, parind.byte);  //Reset port A 
     sensor.byte = mcp2.readPort(MCP23017Port::B);
 
     vTaskDelay(pdMS_TO_TICKS(500));  // Adjust the delay as needed
