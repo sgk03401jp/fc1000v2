@@ -16,8 +16,8 @@
 ![alt text](image/ScreenShot.png)
 
 
-![alt text](BoardImage.JPG)
+![alt text](image/BoardImage.JPG)
 
 
-![alt text](LED_AllOn.JPG)
+![alt text](image/LED_AllOn.JPG)
 
