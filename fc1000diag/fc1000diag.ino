@@ -1,3 +1,9 @@
+/**
+ * @file fc1000diag.ino
+ * @brief fc1000 diagnostic mode
+ * @author JJ1VQD
+ * @date 25-10-12
+ */
 #include <WiFi.h>
 #include <NetworkClient.h>
 #include <WebServer.h>
@@ -9,8 +15,8 @@
 #include <Wire.h>
 #include <MCP23017.h>
 
-#define PIN_A0 0  // Forward Power
-#define PIN_A1 1  // Refrect Power
+#define PIN_A0 0  //! Forward Power
+#define PIN_A1 1  //! Refrect Power
 
 #define MCP23017_ADDR_1 0x20
 #define MCP23017_ADDR_2 0x21
@@ -41,20 +47,20 @@ union bm {
   bf  bits;
 };
 
-bm sercap;
-bm serind;
-bm parind;
-bm sensor;
-bm rytest;
+bm sercap;  //! C-SECTION
+bm serind;  //! LOADING COIL
+bm parind;  //! L-SECTION
+bm sensor;  //! SENSOR
+bm rytest;  //! Relay Test
 
-TaskHandle_t mainTask;
-TaskHandle_t serverTask;
+TaskHandle_t mainTask;            //! main task
+TaskHandle_t serverTask;          //! Web Server task
 TaskHandle_t Task1Handle = NULL;
 TaskHandle_t Task2Handle = NULL;
 TaskHandle_t Task3Handle = NULL;
 
+/* prototypes */
 void ADC_Function(void *pvParameters);
-
 void UpdateSlider();
 void SendXML();
 void SendWebsite();
@@ -76,9 +82,9 @@ void SerIndTest();
 void ParIndTest();
 
 int BitsA0 = 0, BitsA1 = 0;
-float VoltsA0 = 0, VoltsA1 = 0;
+float FwdPower = 0, RefPower = 0;
 uint32_t SensorUpdate = 0;
-int FanSpeed = 1000;
+int TestDelay = 1000;
 bool LED0 = false, SomeOutput = false;
 bool emergencyShutdownActive = false;
 float temperature = 0.0;
@@ -88,6 +94,14 @@ int taskCount = 0;
 char XML[2048];
 char buf[32];
 
+/**
+ * @fn
+ * 404 File Not Found Handler
+ * @brief 404 Handler
+ * @param None
+ * @return None
+ * @detail File Not Found Handler
+ */
 void handleNotFound() {
   String message = "File Not Found\n\n";
   message += "URI: ";
@@ -103,6 +117,14 @@ void handleNotFound() {
   server.send(404, "text/plain", message);
 }
 
+/**
+ * @fn
+ * FreeRTOS Setup Function
+ * @brief Setup Function
+ * @param None
+ * @return None
+ * @detail FreeRTOS setup function
+ */
 void setup(void) {
   Wire.begin();
   Serial.begin(115200);
@@ -128,11 +150,10 @@ void setup(void) {
   mcp1.init();
   mcp2.init();
 
-  mcp1.portMode(MCP23017Port::A, 0); //Port A as output
-  mcp1.portMode(MCP23017Port::B, 0); //Port B as output
-
-  mcp2.portMode(MCP23017Port::A, 0); //Port A as output
-  mcp2.portMode(MCP23017Port::B, 0xff); //Port B as input
+  mcp1.portMode(MCP23017Port::A, 0);    //! Dev0 Port A as output
+  mcp1.portMode(MCP23017Port::B, 0);    //! Dev0 Port B as output
+  mcp2.portMode(MCP23017Port::A, 0);    //! Dev1 Port A as output
+  mcp2.portMode(MCP23017Port::B, 0xff); //! Dev1 Port B as input
 
   if (!hdc.begin()) {
     Serial.println("Couldn't find sensor!");
@@ -188,12 +209,33 @@ void setup(void) {
   xTaskCreateUniversal(ServerTask,              "serverTask", 8192, NULL, 3, &serverTask, 1);
 }
 
+/**
+ * @fn
+ * FreeRTOS loop Function
+ * @brief loop Function
+ * @param None
+ * @return None
+ * @detail FreeRTOS loop function
+ */
 void loop(void) {
 //  server.handleClient();
   delay(2);  //allow the cpu to switch to other tasks
 }
 
+float getSwr(float fwdpower, float refpower) {
+  float swr;
+  swr = (sqrt(fwdpower) + sqrt(refpower)) / (sqrt(fwdpower) - sqrt(refpower));
+  return swr;
+}
 
+/**
+ * @fn
+ * Get FWD/REF Power
+ * @brief get fwd/ref power Function
+ * @param None
+ * @return None
+ * @detail
+ */
 void ADC_Function(void *pvParameters) {
   taskCount++;
   while (true) {
@@ -201,8 +243,8 @@ void ADC_Function(void *pvParameters) {
       SensorUpdate = millis();
       BitsA0 = analogRead(PIN_A0);
       BitsA1 = analogRead(PIN_A1);
-      VoltsA0 = BitsA0 * 3.3 / 4096;
-      VoltsA1 = BitsA1 * 3.3 / 4096;
+      FwdPower = BitsA0 * 3.3 / 4096;
+      RefPower = BitsA1 * 3.3 / 4096;
     }
     vTaskDelay(pdMS_TO_TICKS(1000));  // Adjust the delay as needed
   }
@@ -210,31 +252,24 @@ void ADC_Function(void *pvParameters) {
 
 void UpdateSlider() {
   String t_state = server.arg("VALUE");
-  FanSpeed = t_state.toInt();
+  TestDelay = t_state.toInt();
   Serial.print("UpdateSlider ");
-  Serial.println(FanSpeed);
+  Serial.println(TestDelay);
 
-  // Map FanSpeed to LED brightness
-  int ledBrightness = map(FanSpeed, 100, 5000, 100, 5000);
+  // Map TestDelay to LED brightness
+  int ledBrightness = map(TestDelay, 100, 5000, 100, 5000);
 
   // Respond with the updated RPM value
-  server.send(200, "text/plain", String(FanSpeed));
+  server.send(200, "text/plain", String(TestDelay));
 }
 
 void ProcessButton_0() {
-  LED0 = !LED0;
-//  digitalWrite(PIN_LED, LED0);
   Serial.print("Button 0 ");
-  Serial.println(LED0);
   server.send(200, "text/plain", "");
 }
 
 void ProcessButton_1() {
-  SomeOutput = !SomeOutput;
-  sercap.bits.b7 = !sercap.bits.b7;
-//  digitalWrite(PIN_OUTPUT, SomeOutput);
   Serial.print("Button 1 ");
-  Serial.println(LED0);
   server.send(200, "text/plain", "");
 }
 
@@ -401,11 +436,11 @@ void SendXML() {
   strcpy(XML, "<?xml version = '1.0'?>\n<Data>\n");
   sprintf(buf, "<B0>%d</B0>\n", BitsA0);
   strcat(XML, buf);
-  sprintf(buf, "<V0>%d.%d</V0>\n", (int)(VoltsA0), abs((int)(VoltsA0 * 10) - ((int)(VoltsA0) * 10)));
+  sprintf(buf, "<V0>%d.%d</V0>\n", (int)(FwdPower), abs((int)(FwdPower * 10) - ((int)(FwdPower) * 10)));
   strcat(XML, buf);
   sprintf(buf, "<B1>%d</B1>\n", BitsA1);
   strcat(XML, buf);
-  sprintf(buf, "<V1>%d.%d</V1>\n", (int)(VoltsA1), abs((int)(VoltsA1 * 10) - ((int)(VoltsA1) * 10)));
+  sprintf(buf, "<V1>%d.%d</V1>\n", (int)(RefPower), abs((int)(RefPower * 10) - ((int)(RefPower) * 10)));
   strcat(XML, buf);
 
   if (LED0) {
@@ -521,7 +556,7 @@ void Test_Interval_Function(void *pvParameters) {
       parind.byte++;
     }
 
-    vTaskDelay(pdMS_TO_TICKS(FanSpeed));  // Adjust the delay as needed
+    vTaskDelay(pdMS_TO_TICKS(TestDelay));  // Adjust the delay as needed
   }
 }
 
@@ -539,6 +574,7 @@ void HDC_Sensor_Function(void *pvParameters) {
     // Update the server with temperature and humidity values
     SendXML(); 
     Serial.println("Task2 - display is updated");
+
     vTaskDelay(pdMS_TO_TICKS(1000));  // Adjust the delay as needed
   }
 }
@@ -552,7 +588,7 @@ void RelayControl_Function(void *pvParameters) {
     mcp2.writeRegister(MCP23017Register::GPIO_A, parind.byte);  //Reset port A 
     sensor.byte = mcp2.readPort(MCP23017Port::B);
 
-    vTaskDelay(pdMS_TO_TICKS(500));  // Adjust the delay as needed
+    vTaskDelay(pdMS_TO_TICKS(200));  // Adjust the delay as needed
   }
 }
 

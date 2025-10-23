@@ -1,5 +1,8 @@
-/*
-
+/**
+ * @file MyWebServer.h
+ * @brief fc1000 diagnostic mode
+ * @author JJ1VQD
+ * @date 25-10-12
 
   HTML + CSS styling + javascript all in and undebuggable environment
 
@@ -208,11 +211,9 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
     table tr:last-child td:last-child {
       border-bottom-right-radius: 5px;
     }
-
   </style>
 
   <body style="background-color: #efefef" onload="process()">
-  
     <header>
       <div class="navbar fixed-top">
           <div class="container">
@@ -295,8 +296,6 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
         <td><div class="bodytext">Power</div></td>
         <td><div class="tabledata" id = "pwr3"></div></td>
 
-
-
         </td>
       </tr>
       </table>
@@ -328,8 +327,10 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       
         <td><div class="bodytext">SENSOR <span id="sensor"></span></div></td>
         <td><button type="button" class = "btn" id = "btnsensortest" onclick="ButtonSensorTest()">OFF</button></td>
+        
         <td></td>
         <td></td>
+        
         <td></td>
         <td></td>
       </tr>
@@ -368,6 +369,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
 
         <td></td>
         <td></td>
+
         <td></td>
         <td></td>
       </tr>
@@ -386,6 +388,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
 
         <td></td>
         <td></td>
+
         <td></td>
         <td></td>
       </tr>
@@ -400,10 +403,11 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
         <td><button type="button" class = "btn" id = "btn116" onclick="ButtonPress116()">Toggle</button></td>
       
         <td><div class="bodytext">TEST <span id="test"></span></div></td>
-        <tr></td>
+        <td><button type="button" class = "btn" id = "btn1" onclick="ButtonPress1()">Toggle</button></td>
 
         <td></td>
         <td></td>
+
         <td></td>
         <td></td>
       </tr>
@@ -422,6 +426,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
         
         <td></td>
         <td></td>
+
         <td></td>
         <td></td>
       </tr>
@@ -452,9 +457,6 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
     <button type="button" class = "btn" id = "btn0" onclick="ButtonPress0()">Toggle</button>
     </div>
     <br>
-    <div class="bodytext">Switch</div>
-    <button type="button" class = "btn" id = "btn1" onclick="ButtonPress1()">Toggle</button>
-    </div>
     <br>
 
     <br>
@@ -740,10 +742,10 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       xmldoc = xmlResponse.getElementsByTagName("LED");
       message = xmldoc[0].firstChild.nodeValue;
       document.getElementById("switch").style.backgroundColor="rgb(200,200,200)";
-      if (message == 0){
-        document.getElementById("btn0").innerHTML="Turn ON";
+      if (message == 1){
+        document.getElementById("btn0").innerHTML="ON";
       } else {
-        document.getElementById("btn0").innerHTML="Turn OFF";
+        document.getElementById("btn0").innerHTML="OFF";
       }
 
       xmldoc = xmlResponse.getElementsByTagName("SENSOR");
