@@ -271,7 +271,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
         <td><div class="bodytext">Core 1</div></td>
         <td><div id="core1Status" class="tabledata"></div></td>
         <td><div class="tabledata" id="dhtHumidity"></td>
-        <td></td>
+        <td><button type="button" class = "btn" id = "btn1" onclick="ButtonPress1()">Toggle</button></td>
         <td></td>
       </tr>
 </table>
@@ -401,9 +401,10 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
         
         <td><div class="bodytext">RL116</div></td>
         <td><button type="button" class = "btn" id = "btn116" onclick="ButtonPress116()">Toggle</button></td>
-      
+
         <td><div class="bodytext">TEST <span id="test"></span></div></td>
         <td><button type="button" class = "btn" id = "btn1" onclick="ButtonPress1()">Toggle</button></td>
+
 
         <td></td>
         <td></td>
@@ -475,8 +476,8 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
     var xmlHttp=createXmlHttpObject();
 
     // function to create XML object
-    function createXmlHttpObject(){
-      if(window.XMLHttpRequest){
+    function createXmlHttpObject() {
+      if(window.XMLHttpRequest) {
         xmlHttp=new XMLHttpRequest();
       } else {
         xmlHttp=new ActiveXObject("Microsoft.XMLHTTP");
@@ -675,7 +676,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
     }
 
     // function to handle the response from the ESP
-    function response(){
+    function response() {
       var message;
       var barwidth;
       var currentsensor;
@@ -684,6 +685,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       var dt = new Date();
       var color = "#e8e8e8";
       var sensorVal;
+      var tunerMode;
      
       // get the xml stream
       xmlResponse=xmlHttp.responseXML;
@@ -696,7 +698,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       xmldoc = xmlResponse.getElementsByTagName("B0"); //bits for A0
       message = xmldoc[0].firstChild.nodeValue;
       
-      if (message > 2048){
+      if (message > 2048) {
         color = "#aa0000";
       } else {
         color = "#0000aa";
@@ -721,7 +723,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       // A1
       xmldoc = xmlResponse.getElementsByTagName("B1");
       message = xmldoc[0].firstChild.nodeValue;
-      if (message > 2048){
+      if (message > 2048) {
         color = "#aa0000";
       } else {
         color = "#0000aa";
@@ -742,7 +744,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       xmldoc = xmlResponse.getElementsByTagName("LED");
       message = xmldoc[0].firstChild.nodeValue;
       document.getElementById("switch").style.backgroundColor="rgb(200,200,200)";
-      if (message == 1){
+      if (message == 1) {
         document.getElementById("btn0").innerHTML="ON";
       } else {
         document.getElementById("btn0").innerHTML="OFF";
@@ -751,46 +753,54 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       xmldoc = xmlResponse.getElementsByTagName("SENSOR");
       message = xmldoc[0].firstChild.nodeValue;
       document.getElementById("sensor").innerHTML=message;
-      if (message[7] == 1) {
-        document.getElementById("swr1").innerHTML="Over 1.5";
-        document.getElementById("swr1").style.backgroundColor="rgb(200,000,000)";
+      if (tunerMode == 1) {
+        if (message[7] == 1) {
+          document.getElementById("swr1").innerHTML="Over 1.5";
+          document.getElementById("swr1").style.backgroundColor="rgb(200,000,000)";
+        } else {
+          document.getElementById("swr1").innerHTML="Less 1.5";
+          document.getElementById("swr1").style.backgroundColor="rgb(000,200,000)";
+        }
+        if (message[6] == 1) {
+          document.getElementById("swr2").innerHTML="Over 2";
+          document.getElementById("swr2").style.backgroundColor="rgb(200,000,000)";
+        } else {
+          document.getElementById("swr2").innerHTML="Less 2";
+          document.getElementById("swr2").style.backgroundColor="rgb(000,200,000)";
+        }
+        if (message[5] == 1) {
+          document.getElementById("swr3").innerHTML="Over 3";
+          document.getElementById("swr3").style.backgroundColor="rgb(200,000,000)";
+        } else {
+          document.getElementById("swr3").innerHTML="Less 3";
+          document.getElementById("swr3").style.backgroundColor="rgb(000,200,000)";
+        }
+        document.getElementById("hiz").style.backgroundColor="rgb(000,000,200)";
+        if (message[4] == 1) {
+          document.getElementById("hiz").innerHTML="Over 50";
+        } else {
+          document.getElementById("hiz").innerHTML="Less 50";
+        }
+        document.getElementById("phi").style.backgroundColor="rgb(000,000,200)";
+        if (message[3] == 1) {
+          document.getElementById("phi").innerHTML="Inductive";
+        } else {
+          document.getElementById("phi").innerHTML="Capacitive";
+        } 
+        if (message[2] == 1) {
+          document.getElementById("pwr3").innerHTML="Over 3W";
+          document.getElementById("pwr3").style.backgroundColor="rgb(200,000,000)";
+        } else {
+          document.getElementById("pwr3").innerHTML="Less 3W";
+          document.getElementById("pwr3").style.backgroundColor="rgb(000,200,000)";
+        }
       } else {
-        document.getElementById("swr1").innerHTML="Less 1.5";
-        document.getElementById("swr1").style.backgroundColor="rgb(000,200,000)";
-      }
-      if (message[6] == 1) {
-        document.getElementById("swr2").innerHTML="Over 2";
-        document.getElementById("swr2").style.backgroundColor="rgb(200,000,000)";
-      } else {
-        document.getElementById("swr2").innerHTML="Less 2";
-        document.getElementById("swr2").style.backgroundColor="rgb(000,200,000)";
-      }
-      if (message[5] == 1) {
-        document.getElementById("swr3").innerHTML="Over 3";
-        document.getElementById("swr3").style.backgroundColor="rgb(200,000,000)";
-      } else {
-        document.getElementById("swr3").innerHTML="Less 3";
-        document.getElementById("swr3").style.backgroundColor="rgb(000,200,000)";
-      }
-      document.getElementById("hiz").style.backgroundColor="rgb(000,000,200)";
-      if (message[4] == 1) {
-        document.getElementById("hiz").innerHTML="Over 50";
-      } else {
-        document.getElementById("hiz").innerHTML="Less 50";
-      }
-      document.getElementById("phi").style.backgroundColor="rgb(000,000,200)";
-      if (message[3] == 1) {
-        document.getElementById("phi").innerHTML="Inductive";
-      } else {
-        document.getElementById("phi").innerHTML="Capacitive";
-
-      }
-      if (message[2] == 1) {
-        document.getElementById("pwr3").innerHTML="Over 3W";
-        document.getElementById("pwr3").style.backgroundColor="rgb(200,000,000)";
-      } else {
-        document.getElementById("pwr3").innerHTML="Less 3W";
-        document.getElementById("pwr3").style.backgroundColor="rgb(000,200,000)";
+        document.getElementById("swr1").style.backgroundColor="rgb(200,200,200)";
+        document.getElementById("swr2").style.backgroundColor="rgb(200,200,200)";                
+        document.getElementById("swr3").style.backgroundColor="rgb(200,200,200)";
+        document.getElementById("hiz").style.backgroundColor="rgb(200,200,200)";
+        document.getElementById("phi").style.backgroundColor="rgb(200,200,200)";
+        document.getElementById("pwr3").style.backgroundColor="rgb(200,200,200)";
       }
 
       xmldoc = xmlResponse.getElementsByTagName("SERCAP");
@@ -831,14 +841,14 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
         document.getElementById("btn109").innerHTML="OFF";
         document.getElementById("btn109").style.backgroundColor="rgb(000,200,000)";
       }
-      if (message[2] == 1){
+      if (message[2] == 1) {
         document.getElementById("btn110").innerHTML="ON";
         document.getElementById("btn110").style.backgroundColor="rgb(200,100,000)";
       } else {
         document.getElementById("btn110").innerHTML="OFF";
         document.getElementById("btn110").style.backgroundColor="rgb(000,200,000)";
       }
-      if (message[1] == 1){
+      if (message[1] == 1) {
         document.getElementById("btn111").innerHTML="ON";
         document.getElementById("btn111").style.backgroundColor="rgb(200,100,000)";
       } else {
@@ -849,49 +859,49 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       xmldoc = xmlResponse.getElementsByTagName("SERIND");
       message = xmldoc[0].firstChild.nodeValue;
       document.getElementById("serind").innerHTML=message;
-      if (message[7] == 1){
+      if (message[7] == 1) {
         document.getElementById("btn118").innerHTML="ON";
         document.getElementById("btn118").style.backgroundColor="rgb(200,100,000)";
       } else {
         document.getElementById("btn118").innerHTML="OFF";
         document.getElementById("btn118").style.backgroundColor="rgb(000,200,000)";
       }
-      if (message[6] == 1){
+      if (message[6] == 1) {
         document.getElementById("btn119").innerHTML="ON";
         document.getElementById("btn119").style.backgroundColor="rgb(200,100,000)";
       } else {
         document.getElementById("btn119").innerHTML="OFF";
         document.getElementById("btn119").style.backgroundColor="rgb(000,200,000)";
       }
-      if (message[5] == 1){
+      if (message[5] == 1) {
         document.getElementById("btn120").innerHTML="ON";
         document.getElementById("btn120").style.backgroundColor="rgb(200,100,000)";
       } else {
         document.getElementById("btn120").innerHTML="OFF";
         document.getElementById("btn120").style.backgroundColor="rgb(000,200,000)";
       }
-      if (message[4] == 1){
+      if (message[4] == 1) {
         document.getElementById("btn121").innerHTML="ON";
         document.getElementById("btn121").style.backgroundColor="rgb(200,100,000)";
       } else {
         document.getElementById("btn121").innerHTML="OFF";
         document.getElementById("btn121").style.backgroundColor="rgb(000,200,000)";
       }
-      if (message[3] == 1){
+      if (message[3] == 1) {
         document.getElementById("btn122").innerHTML="ON";
         document.getElementById("btn122").style.backgroundColor="rgb(200,100,000)";
       } else {
         document.getElementById("btn122").innerHTML="OFF";
         document.getElementById("btn122").style.backgroundColor="rgb(000,200,000)";
       }
-      if (message[1] == 1){
+      if (message[1] == 1) {
         document.getElementById("btn103").innerHTML="ON";
         document.getElementById("btn103").style.backgroundColor="rgb(200,100,000)";
       } else {
         document.getElementById("btn103").innerHTML="OFF";
         document.getElementById("btn103").style.backgroundColor="rgb(000,200,000)";
       }
-      if (message[0] == 1){
+      if (message[0] == 1) {
         document.getElementById("btn104").innerHTML="ON";
         document.getElementById("btn104").style.backgroundColor="rgb(200,100,000)";
       } else {
@@ -902,81 +912,83 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       xmldoc = xmlResponse.getElementsByTagName("PARIND");
       message = xmldoc[0].firstChild.nodeValue;
       document.getElementById("parind").innerHTML=message;
-      if (message[7] == 1){
+      if (message[7] == 1) {
         document.getElementById("btn112").innerHTML="ON";
         document.getElementById("btn112").style.backgroundColor="rgb(200,100,000)";
       } else {
         document.getElementById("btn112").innerHTML="OFF";
         document.getElementById("btn112").style.backgroundColor="rgb(000,200,000)";
       }
-      if (message[6] == 1){
+      if (message[6] == 1) {
         document.getElementById("btn113").innerHTML="ON";
         document.getElementById("btn113").style.backgroundColor="rgb(200,100,000)";
       } else {
         document.getElementById("btn113").innerHTML="OFF";
         document.getElementById("btn113").style.backgroundColor="rgb(000,200,000)";
       }
-      if (message[5] == 1){
+      if (message[5] == 1) {
         document.getElementById("btn114").innerHTML="ON";
         document.getElementById("btn114").style.backgroundColor="rgb(200,100,000)";
       } else {
         document.getElementById("btn114").innerHTML="OFF";
         document.getElementById("btn114").style.backgroundColor="rgb(000,200,000)";
       }
-      if (message[4] == 1){
+      if (message[4] == 1) {
         document.getElementById("btn115").innerHTML="ON";
         document.getElementById("btn115").style.backgroundColor="rgb(200,100,000)";
       } else {
         document.getElementById("btn115").innerHTML="OFF";
         document.getElementById("btn115").style.backgroundColor="rgb(000,200,000)";
       }
-      if (message[3] == 1){
+      if (message[3] == 1) {
         document.getElementById("btn116").innerHTML="ON";
         document.getElementById("btn116").style.backgroundColor="rgb(200,100,000)";
       } else {
         document.getElementById("btn116").innerHTML="OFF";
         document.getElementById("btn116").style.backgroundColor="rgb(000,200,000)";
       }
-      if (message[2] == 1){
+      if (message[2] == 1) {
         document.getElementById("btn117").innerHTML="ON";
         document.getElementById("btn117").style.backgroundColor="rgb(200,100,000)";
       } else {
         document.getElementById("btn117").innerHTML="OFF";
         document.getElementById("btn117").style.backgroundColor="rgb(000,200,000)";
       }
-      if (message[0] == 1){
+      if (message[0] == 1) {
         document.getElementById("btn101").innerHTML="ON";
         document.getElementById("btn101").style.backgroundColor="rgb(200,100,000)";
+        tunerMode=1;
       } else {
         document.getElementById("btn101").innerHTML="OFF";
         document.getElementById("btn101").style.backgroundColor="rgb(000,200,000)";
+        tunerMode=0;
       }
 
       xmldoc = xmlResponse.getElementsByTagName("TEST");
       message = xmldoc[0].firstChild.nodeValue;
       document.getElementById("test").innerHTML=message;
-      if (message[7] == 1){
+      if (message[7] == 1) {
         document.getElementById("btnsensortest").innerHTML="ON";
         document.getElementById("btnsensortest").style.backgroundColor="rgb(200,200,200)";
       } else {
         document.getElementById("btnsensortest").innerHTML="OFF";
         document.getElementById("btnsensortest").style.backgroundColor="rgb(200,200,200)";
       }
-      if (message[6] == 1){
+      if (message[6] == 1) {
         document.getElementById("btnsercaptest").innerHTML="ON";
         document.getElementById("btnsercaptest").style.backgroundColor="rgb(200,100,000)";
       } else {
         document.getElementById("btnsercaptest").innerHTML="OFF";
         document.getElementById("btnsercaptest").style.backgroundColor="rgb(000,200,000)";
       }
-      if (message[5] == 1){
+      if (message[5] == 1) {
         document.getElementById("btnserindtest").innerHTML="ON";
         document.getElementById("btnserindtest").style.backgroundColor="rgb(200,100,000)";
       } else {
         document.getElementById("btnserindtest").innerHTML="OFF";
         document.getElementById("btnserindtest").style.backgroundColor="rgb(000,200,000)";
       }
-      if (message[4] == 1){
+      if (message[4] == 1) {
         document.getElementById("btnparindtest").innerHTML="ON";
         document.getElementById("btnparindtest").style.backgroundColor="rgb(200,100,000)";
       } else {
@@ -989,10 +1001,14 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
       // update the text in the table
       if (message == 1) {
         document.getElementById("switch").innerHTML="ON";
+        document.getElementById("btn1").innerHTML="Turn ON";
         document.getElementById("switch").style.backgroundColor="rgb(200,100,000)";
+        document.getElementById("btn1").style.backgroundColor="rgb(000,200,000)";
       } else {
         document.getElementById("switch").innerHTML="OFF";
+        document.getElementById("btn1").innerHTML="Turn OFF";
         document.getElementById("switch").style.backgroundColor="rgb(000,200,000)";
+        document.getElementById("btn1").style.backgroundColor="rgb(000,200,000)";
       }
 
       // Add this part to update the content of the Emergency Mode cell
@@ -1030,7 +1046,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
     // force this call with stuff like this
     // server.on("/xml", SendXML);
     // otherwise the page will not request XML from the ESP, and updates will not happen
-    function process(){
+    function process() {
      
      if(xmlHttp.readyState==0 || xmlHttp.readyState==4) {
         xmlHttp.open("PUT","xml",true);

@@ -15,22 +15,21 @@
 #include <Wire.h>
 #include <MCP23017.h>
 
+/* Definition */
 #define PIN_A0 0  //! Forward Power
 #define PIN_A1 1  //! Refrect Power
 
 #define MCP23017_ADDR_1 0x20
 #define MCP23017_ADDR_2 0x21
-MCP23017 mcp1 = MCP23017(MCP23017_ADDR_1);
-MCP23017 mcp2 = MCP23017(MCP23017_ADDR_2);
 
 /* Actual data stored in WiFiSettings.h */
 //const char *ssid = "YOUR_SSID";
 //const char *password = "YOUR_PASSWD";
 
-WebServer server(80);
-
-Adafruit_HDC1000 hdc = Adafruit_HDC1000();
-
+/* Macros */
+/* Type Definition */
+/* Enumlation */
+/* Structure Definition */
 struct bf {
   uint8_t b0 : 1;
   uint8_t b1 : 1;
@@ -47,19 +46,7 @@ union bm {
   bf  bits;
 };
 
-bm sercap;  //! C-SECTION
-bm serind;  //! LOADING COIL
-bm parind;  //! L-SECTION
-bm sensor;  //! SENSOR
-bm rytest;  //! Relay Test
-
-TaskHandle_t mainTask;            //! main task
-TaskHandle_t serverTask;          //! Web Server task
-TaskHandle_t Task1Handle = NULL;
-TaskHandle_t Task2Handle = NULL;
-TaskHandle_t Task3Handle = NULL;
-
-/* prototypes */
+/* Prototypes */
 void ADC_Function(void *pvParameters);
 void UpdateSlider();
 void SendXML();
@@ -81,6 +68,24 @@ void SerCapTest();
 void SerIndTest();
 void ParIndTest();
 
+/* Global Variables */
+MCP23017 mcp1 = MCP23017(MCP23017_ADDR_1);
+MCP23017 mcp2 = MCP23017(MCP23017_ADDR_2);
+Adafruit_HDC1000 hdc = Adafruit_HDC1000();
+WebServer server(80);
+
+bm sercap;  //! C-SECTION
+bm serind;  //! LOADING COIL
+bm parind;  //! L-SECTION
+bm sensor;  //! SENSOR
+bm rytest;  //! Relay Test
+
+TaskHandle_t mainTask;            //! main task
+TaskHandle_t serverTask;          //! Web Server task
+TaskHandle_t Task1Handle = NULL;
+TaskHandle_t Task2Handle = NULL;
+TaskHandle_t Task3Handle = NULL;
+
 int BitsA0 = 0, BitsA1 = 0;
 float FwdPower = 0, RefPower = 0;
 uint32_t SensorUpdate = 0;
@@ -90,6 +95,7 @@ bool emergencyShutdownActive = false;
 float temperature = 0.0;
 float humidity = 0.0;
 int taskCount = 0;
+int idleCount = 0;
 
 char XML[2048];
 char buf[32];
@@ -218,6 +224,7 @@ void setup(void) {
  * @detail FreeRTOS loop function
  */
 void loop(void) {
+  idleCount++;
 //  server.handleClient();
   delay(2);  //allow the cpu to switch to other tasks
 }
@@ -269,6 +276,7 @@ void ProcessButton_0() {
 }
 
 void ProcessButton_1() {
+  rytest.bits.b5 = !rytest.bits.b5;
   Serial.print("Button 1 ");
   server.send(200, "text/plain", "");
 }
@@ -473,7 +481,7 @@ void SendXML() {
     rytest.bits.b3, rytest.bits.b2, rytest.bits.b1, rytest.bits.b0);
   strcat(XML, buf);
 
-  if (SomeOutput) {
+  if (rytest.bits.b5 == 1) {
     strcat(XML, "<SWITCH>1</SWITCH>\n");
   } else {
     strcat(XML, "<SWITCH>0</SWITCH>\n");
@@ -498,7 +506,7 @@ void SendXML() {
   strcat(XML, "<CORE1_STATUS>");
   if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && uxTaskGetNumberOfTasks() > 1) {
     // char a= Serial.read();
-    // if(a == 'C'){
+    // if(a == 'C') {
     //   strcat(XML, "0");
     // }
     strcat(XML, "1");

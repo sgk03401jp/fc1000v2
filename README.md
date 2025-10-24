@@ -1,16 +1,16 @@
-# fc1000v2
-## Migrate Original CPU to ES32S3
+# FC1000v2 
+## Migrate Original CPU to ES32C3
 
 ### sercap
 | bit | COL | pin | MUX | PIN | SERCAP
 | --- | --- | --- | --- | --- | ---
 | b0 | BRO | 13 | GPA0A | 21 | RL105 |
 | b1 | ORA | 14 | GPA1A | 22 | RL106 |
-| b2 | GRE | 15 | GPA2A | 23 | RL107 |
-| b3 | BLU | 16 | GPA3A | 24 | RL108 |
-| b4 | PUR | 17 | GPA4A | 25 | RL109 |
-| b5 | GRA | 18 | GPA5A | 26 | RL110 |
-| b6 | WHI | 19 | GPA6A | 27 | RL111 |
+| b2 | YEL | 15 | GPA2A | 23 | RL107 |
+| b3 | GRE | 16 | GPA3A | 24 | RL108 |
+| b4 | BLU | 17 | GPA4A | 25 | RL109 |
+| b5 | PUR | 18 | GPA5A | 26 | RL110 |
+| b6 | GRA | 19 | GPA6A | 27 | RL111 |
 | b7 |
 
 ### SERIND
@@ -35,7 +35,7 @@
 | b4 | 22 | GRA | GPA4B | 25 | RL116 |
 | b5 | 21 | WHI | GPA5B | 26 | RL117 |
 | b6 | | |
-| b7 | 12 | BRO | GPA7B | 28 | RL101 | 
+| b7 | 12 | BRO | GPA7B | 28 | RL101 |
 
 ### SENSOR
 | bit | pin | COL | MUX | PIN | SENSOR |
@@ -70,3 +70,9 @@
 
 ![alt text](image/LED_AllOn.JPG)
 
+### Power Consumption
+
+| Relay | Current (mA) |
+| --- | ---
+| All Off | 70
+| All On | 576
