@@ -10,10 +10,9 @@
 #include <ESPmDNS.h>
 #include "MyWiFiSettings.h"
 #include "MyWebserver.h"
-#include "Adafruit_HDC1000.h"
-#include <MCP23017.h>
 #include <Wire.h>
 #include <MCP23017.h>
+#include "Adafruit_HDC1000.h"
 
 /* Definition */
 #define PIN_A0 0  //! Forward Power

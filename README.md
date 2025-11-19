@@ -1,6 +1,10 @@
 # FC1000v2 
 ## Migrate Original CPU to ES32C3
 
+![alt text](MCP23017.png)
+
+![alt text](HD5305.png)
+
 ### sercap
 | bit | COL | pin | MUX | PIN | SERCAP
 | --- | --- | --- | --- | --- | ---
